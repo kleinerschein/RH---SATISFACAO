@@ -8,7 +8,7 @@ import { Resposta } from '../../types/resposta';
   providedIn: 'root',
 })
 export class BancoService {
-  private apiUrl = '/api/bd.php';
+  private apiUrl = 'http://92.113.34.132:3000';
 
   constructor(private http: HttpClient) {}
 
@@ -72,7 +72,8 @@ export class BancoService {
   async excluirArea(id: number) {
     const query = `DELETE FROM areas WHERE id = ${id}`;
     const response = await this.consultarBanco(query);
-    if (!response || !response.success) {
+
+    if (!response || !response.affectedRows) {
       throw new Error('Erro ao excluir área: ' + (response?.message || ''));
     }
     return response;
@@ -85,7 +86,7 @@ export class BancoService {
   async editarArea(area: Area) {
     const query = `UPDATE areas SET nome = '${area.nome}', descricao = '${area.descricao}' WHERE id = ${area.id}`;
     const response = await this.consultarBanco(query);
-    if (!response || !response.success) {
+    if (!response || !response.affectedRows) {
       throw new Error('Erro ao editar área: ' + (response?.message || ''));
     }
     return response;
@@ -102,7 +103,7 @@ export class BancoService {
       console.log('Consulta SQL para inserir categoria:', query);
       const response = await this.consultarBanco(query);
       console.log('Resposta do banco:', response);
-      if (response && response.success) {
+      if (response && response.affectedRows) {
         return response;
       }
       throw new Error(
@@ -130,7 +131,7 @@ export class BancoService {
   async excluirCategoria(id: number) {
     const query = `DELETE FROM categoria WHERE id = ${id}`;
     const response = await this.consultarBanco(query);
-    if (!response || !response.success) {
+    if (!response || !response.affectedRows) {
       throw new Error(
         'Erro ao excluir categoria: ' + (response?.message || '')
       );
@@ -150,9 +151,9 @@ export class BancoService {
   ) {
     try {
       const query = `INSERT INTO pergunta(\`pergunta\`, \`categoria_id\`, \`descritiva\`) VALUES ('${pergunta}', ${categoriaId}, ${descritiva})`;
-      console.log('Consulta SQL para inserir pergunta:', query);
+      
       const response = await this.consultarBanco(query);
-      if (response && response.success) {
+      if (response && response.affectedRows) {
         return response;
       } else {
         throw new Error(
@@ -182,7 +183,7 @@ export class BancoService {
   async excluirPergunta(id: number) {
     const query = `DELETE FROM pergunta WHERE id = ${id}`;
     const response = await this.consultarBanco(query);
-    if (!response || !response.success) {
+    if (!response || !response.affectedRows) {
       throw new Error('Erro ao excluir pergunta: ' + (response?.message || ''));
     }
     return response;

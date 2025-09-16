@@ -77,7 +77,6 @@ export class ListarSetoresComponent implements OnInit {
     this.router.navigate(['/areas/cadastrar']);
   }
 
-  // Atualiza a seleção quando clicar no botão
   onRowSelectArea(area: any) {
     this.areaSelecionada = area;
   }
@@ -96,7 +95,6 @@ export class ListarSetoresComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-danger p-button-outlined',
       rejectButtonStyleClass: 'p-button-secondary p-button-outlined',
       accept: async () => {
-        // Chama o serviço para excluir a área
         const response = await this.bancoService.excluirArea(area.id);
         if (response) {
           this.successMessage('Área excluída com sucesso!');
