@@ -1,27 +1,52 @@
-# Aplicacao181
+# RH - SATISFAÇÃO
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.3.
+<div style="display: flex; justify-content: center">
+    <img src="public\favicon.png" alt="Logo do projeto" width="200"/>
+    
+</div>
 
-## Development server
+## Pesquisa de clima - Kleiner
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### UTILIZAÇÂO
+#### PAINEL
+##### Efetua **CRUDs** essênciais como **Áreas, Categorias e Perguntas**, demonstra dados em forma de **identificadores** e permite **download** da pesquisa como **Excell**.
 
-## Code scaffolding
+#### FORMULÁRIO
+##### Nesta aba é onde as **respostas das perguntas** são efetuadas, carregando um formulário dinâmico de acordo com os dados cadastrados no **painel**
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### SUBIR SERVIÇO
+#### FRONT-END
+##### Após **clone** do repositório
 
-## Build
+##### Entra na **root** do projeto
+```bash
+cd RH---SATISFACAO
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+##### Instarla dependências
+```bash
+npm install
+```
 
-## Running unit tests
+##### Levanta **Angular**
+```bash
+npm run start
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+#### BACK-END
+##### No **servidor** vá até a pasta **kleiner/angular/server**
+```bash
+cd kleiner/angular/server
+```
 
-## Running end-to-end tests
+##### Instale **pm2** globalmente 
+```bash
+npm install pm2 -g
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+#### Com **pm**2 inicie o serviço do **server.js**
+```bash
+pm2 start server,js -name gptw-server
+```
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+#### Após realizar os processos acima pode estar acessando o **ip** do **servidor** na porta **127.0.0.1:4280**
