@@ -1,0 +1,67 @@
+<div class="home-container">
+  <div class="content">
+    <p-card
+      [style]="{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column'
+      }"
+    >
+      <div
+        style="
+          display: flex;
+          width: 100%;
+          height: 100%;
+          justify-content: center;
+        "
+      >
+        <!--    Card Central    -->
+        <div class="box-shadow" style="width: 30%">
+          <h1 style="text-align: center">Efetue seu login!</h1>
+
+          <!--  Formulario de login -->
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+              padding: 4rem;
+            "
+          >
+            <p-inputGroup>
+              <p-inputGroupAddon>
+                <i class="pi pi-user"></i>
+              </p-inputGroupAddon>
+              <input pInputText placeholder="Usuário" [(ngModel)]="username" />
+            </p-inputGroup>
+            <p-inputGroup>
+              <p-inputGroupAddon>
+                <i class="pi pi-lock"></i>
+              </p-inputGroupAddon>
+              <input
+                pInputText
+                type="password"
+                placeholder="Senha"
+                (keydown.enter)="login()"
+                [(ngModel)]="password"
+              />
+            </p-inputGroup>
+            <div style="display: flex; justify-content: end">
+              <p-button
+                label="Entrar"
+                icon="pi pi-sign-in"
+                (click)="login()"
+                styleClass="w-9rem"
+                severity="secondary"
+              ></p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+
+<p-toast></p-toast>

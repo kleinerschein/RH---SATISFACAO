@@ -1,0 +1,39 @@
+<p-dialog
+  header="🎉 Bem-vindo!"
+  [(visible)]="visible"
+  [closable]="false"
+  [modal]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '500px', 'border-radius': '12px' }"
+  contentStyleClass="dialog-content"
+>
+  <div class="dialog-body">
+    <p>
+      Este é o link para a nossa <b>pesquisa de clima organizacional</b>.  
+      Contamos com a sua colaboração para respondê-la.  
+    </p>
+
+    <p>
+      O seu feedback é essencial para entendermos nosso ambiente de trabalho e
+      identificarmos pontos de melhoria.  
+      <b>Sua participação é anônima</b> e todas as respostas serão tratadas com
+      confidencialidade.
+    </p>
+
+    <p class="thanks">
+      🙏 Obrigado pelo seu tempo e sinceridade!
+    </p>
+  </div>
+
+  <p-footer>
+    <div class="dialog-footer">
+      <button
+        pButton
+        type="button"
+        label="Fechar"
+        class="p-button-rounded p-button-outlined p-button-secondary"
+        (click)="hide()"
+      ></button>
+    </div>
+  </p-footer>
+</p-dialog>

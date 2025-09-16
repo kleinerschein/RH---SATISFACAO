@@ -1,0 +1,58 @@
+<div style="display: flex; height: 100vh; width: 100%">
+  <!-- Barra Lateral Esquerda -->
+  <div  *ngIf="!router.url.includes('pesquisa/responder')"  style="height: 100%; padding: 8px">
+    <div style="display: flex; justify-content: center">
+      <img
+        src="favicon.png"
+        alt="Home Icon"
+        style="width: 64px; cursor: pointer"
+        (click)="pushHome()"
+      />
+    </div>
+
+    <p-tieredMenu
+    [style]="{ width: '170px' }"
+      [model]="items"
+      [popup]="false"
+      styleClass="vertical-menu"
+    ></p-tieredMenu>
+  </div>
+
+  <!-- Área Principal -->
+  <div *ngIf="!router.url.includes('pesquisa/responder')"   style="flex-grow: 1; display: flex; flex-direction: column">
+    <!-- Cabeçalho -->
+    <div style="height: 72px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+      <h2 style="margin-left: 2rem">Great Place To Work</h2>
+
+      <div style="margin-right: 1rem;">
+      <button *ngIf="isLoggedIn()"
+        icon="pi pi-sign-out"
+        label="Sair"
+        [outlined]="true"
+        (click)="logout()"
+        pButton
+        severity="danger"
+      ></button>
+    </div> 
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+
+
+  <!-- Área RESPOSTA -->
+  <div *ngIf="router.url.includes('pesquisa/responder')"   style="flex-grow: 1; display: flex; flex-direction: column">
+    <div class="content-rsposta">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>
+
+<p-confirmDialog />
+<app-modal-loading></app-modal-loading>
+<app-cadastrar-categoria></app-cadastrar-categoria>

@@ -1,0 +1,50 @@
+<div class="home-container">
+  <div class="content">
+    <div class="header">
+      <h2 style="text-align: start">Cadastrar Área</h2>
+      <button
+        pButton
+        icon="pi pi-save"
+        label="Salvar"
+        style="align-self: flex-start; height: 2rem"
+        [outlined]="true"
+        [severity]="'contrast'"
+        [style]="{ width: '150px', marginBottom: '1rem' }"
+        (click)="cadastrarSetor()"
+      ></button>
+    </div>
+
+    <p-divider></p-divider>
+
+    <p-floatLabel style="width: 30%">
+      <input
+        pInputText
+        id="nome"
+        [(ngModel)]="nome"
+        showDelay="500"
+        tooltipPosition="top"
+        pTooltip="Nome do Setor a ser cadastrado"
+        style="width: 100%"
+      />
+      <label for="nome">Nome da Área</label>
+    </p-floatLabel>
+
+    <p-divider></p-divider>
+
+    <div>
+      <p-floatLabel>
+        <textarea
+          id="descricao"
+          [style]="{ width: '100%' }"
+          [(ngModel)]="descricao"
+          pInputTextarea
+          rows="25"
+          [autoResize]="true"
+        ></textarea>
+        <label for="descricao">Descrição da Área</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</div>
+
+<p-toast></p-toast>

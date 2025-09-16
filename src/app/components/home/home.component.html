@@ -1,0 +1,91 @@
+<div class="home-container">
+  <div class="content">
+    <div>
+      <button
+        pButton
+        label="Baixar Pesquisa"
+        icon="pi pi-download"
+        class="p-button-outlined"
+        (click)="downloadExcell()"
+      ></button>
+    </div>
+    <div class="linha-grafico">
+      <div class="grafico">
+        <h4>Média Geral por Categoria</h4>
+        <p-chart
+          type="bar"
+          [data]="chartData"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
+
+      <div class="grafico">
+        <h4>Média por Área</h4>
+        <p-chart
+          type="line"
+          [data]="chartAreaData"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
+    </div>
+
+    <div class="linha-grafico">
+      <div class="grafico">
+        <h4>Distribuição por Sexo</h4>
+        <p-chart
+          type="pie"
+          [data]="chartSexoData"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
+
+      <div class="grafico">
+        <h4>Distribuição por Gênero</h4>
+        <p-chart
+          type="doughnut"
+          [data]="chartGeneroData"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
+    </div>
+
+    <div class="linha-grafico full-width">
+      <div class="grafico-expandido">
+        <h4>Notas por Pergunta</h4>
+        <p-chart
+          type="bar"
+          [data]="chartNotaPergunta"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
+    </div>
+
+    <div class="linha-grafico">
+      <div
+        style="display: flex; gap: 2rem; width: 100%; justify-content: center"
+      >
+        <div style="width: 50%">
+          <h4>Faixa Etária</h4>
+          <p-chart
+            type="doughnut"
+            [data]="chartFaixaEtariaData"
+            [options]="chartOptions"
+          ></p-chart>
+        </div>
+      </div>
+    </div>
+
+    <div class="linha-grafico">
+      <div class="grafico-expandido">
+        <h4>Média por Categoria e Área</h4>
+        <p-chart
+          type="bar"
+          [data]="chartAreaCategoria"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal-loading></app-modal-loading>

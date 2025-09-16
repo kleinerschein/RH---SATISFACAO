@@ -1,0 +1,83 @@
+<p-dialog
+  header="Cadastrar Categoria"
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '50vw', height: '70vh' }"
+  [baseZIndex]="10000"
+>
+  <form style="margin-bottom: 1rem;" [formGroup]="formCategoria" (ngSubmit)="cadastrarCategoria()">
+    <div
+      class="p-fluid"
+      style="display: flex; align-items: flex-end; gap: 1rem"
+    >
+      <div style="flex: 1">
+        <label for="nome">Nome</label>
+        <input
+          id="nome"
+          type="text"
+          formControlName="nome"
+          pInputText
+          class="w-full"
+        />
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          pButton
+          label="Cadastrar"
+          icon="pi pi-plus"
+          class="p-button-success"
+          [outlined]="true"
+          [disabled]="formCategoria.invalid"
+        ></button>
+      </div>
+    </div>
+    <small
+      class="p-error"
+      *ngIf="
+        formCategoria.get('nome')?.invalid && formCategoria.get('nome')?.touched
+      "
+    >
+      O nome é obrigatório.
+    </small>
+  </form>
+
+  <p-table
+    [value]="categorias"
+    [paginator]="true"
+    [rows]="10"
+    [columns]="cols"
+    [scrollable]="true"
+    scrollHeight="58vh"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of cols">{{ col.header }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-categoria>
+      <tr>
+        <td>{{ categoria.id }}</td>
+        <td>{{ categoria.nome }}</td>
+        <td>
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-danger"
+            [outlined]="true"
+            (click)="removerCategoria(categoria.id)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="empty">
+      <tr>
+        <td colspan="2" class="text-center">Nenhuma categoria cadastrada</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-toast></p-toast>

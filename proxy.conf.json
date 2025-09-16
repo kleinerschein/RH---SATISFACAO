@@ -1,0 +1,15 @@
+{
+  "/g5-senior-services": {
+    "target": "http://192.168.0.10:8080",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/api": {
+    "target": "http://192.168.0.10/Kleiner_Webservice/gptw/",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
