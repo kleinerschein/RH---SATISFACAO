@@ -79,8 +79,6 @@ export class ResponderComponent implements OnInit {
 
     this.areas = await this.bancoService.consultarAreas();
 
-    console.log('Categorias e Perguntas:', this.areas);
-
     this.areas = this.areas.map((area) => ({
       ...area,
       nome: area.nome + " | " + area.descricao,

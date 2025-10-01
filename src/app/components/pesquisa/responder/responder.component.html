@@ -111,6 +111,12 @@
             [optionLabel]="'nome'"
             [style]="{ width: '100%' }"
           ></p-listbox>
+          <p
+            *ngIf="form.get('area')?.invalid && form.get('area')?.touched"
+            class="error-message"
+          >
+            Resposta obrigatória
+          </p>
         </div>
 
         <div class="form-row">
@@ -125,6 +131,13 @@
               placeholder="Digite sua idade"
               style="width: 100%"
             />
+
+            <p
+              *ngIf="form.get('idade')?.invalid && form.get('idade')?.touched"
+              class="error-message"
+            >
+              Resposta obrigatória
+            </p>
           </div>
 
           <div>
@@ -138,6 +151,12 @@
               formControlName="sexo"
               styleClass="input-sexo"
             ></p-dropdown>
+            <p
+              *ngIf="form.get('sexo')?.invalid && form.get('sexo')?.touched"
+              class="error-message"
+            >
+              Resposta obrigatória
+            </p>
           </div>
 
           <div>
@@ -157,6 +176,12 @@
                 </div>
               </ng-template>
             </p-dropdown>
+            <p
+              *ngIf="form.get('genero')?.invalid && form.get('genero')?.touched"
+              class="error-message"
+            >
+              Resposta obrigatória
+            </p>
           </div>
         </div>
 
@@ -203,6 +228,16 @@
                 style="width: 100%"
               ></textarea>
             </div>
+            <br />
+            <p
+              *ngIf="
+                getFormControl(getIndex(i, j)).invalid &&
+                getFormControl(getIndex(i, j)).touched
+              "
+              class="error-message"
+            >
+              Resposta obrigatória
+            </p>
           </div>
         </div>
         <div
