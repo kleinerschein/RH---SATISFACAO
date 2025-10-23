@@ -41,7 +41,7 @@
             </p-iconField>
           </div>
 
-          <button 
+          <button
             pButton
             icon="pi pi-plus"
             label="Cadastrar Pergunta"
@@ -53,7 +53,7 @@
         </div>
       </ng-template>
 
-        <!-- Cabeçalho da Tabela -->
+      <!-- Cabeçalho da Tabela -->
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th *ngFor="let col of columns" [pSortableColumn]="col.field">
@@ -63,20 +63,34 @@
         </tr>
       </ng-template>
 
+      <!-- Corpo da Tabela -->
       <ng-template pTemplate="body" let-area let-columns="columns">
         <tr>
-          <td *ngFor="let col of columns" [ngSwitch]="col.field">
-            <span *ngSwitchCase="'id'">{{ area.id }}</span>
-            <span *ngSwitchCase="'pergunta'">{{ area.pergunta }}</span>
-            <span *ngSwitchCase="'categoria'">{{ area.categoria }}</span>
-            <span *ngSwitchCase="'descritiva'">{{ area.descritiva == 1 ? "Sim" : "Não" }}</span>
-            <button
-              *ngSwitchCase="'excluir'"
-              pButton
-              icon="pi pi-trash"
-              class="p-button-danger"
-              (click)="excluirPergunta(area)"
-            ></button>
+          <td *ngFor="let col of columns">
+            <ng-container *ngIf="col.field !== 'acoes'; else acoesTemplate">
+              {{ area[col.field] }}
+            </ng-container>
+
+            <ng-template #acoesTemplate>
+              <div class="centered">
+                <p-menu
+                  #menu
+                  [popup]="true"
+                  appendTo="body"
+                  [model]="items"
+                ></p-menu>
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-cog"
+                  label="Ações"
+                  (click)="onRowSelect(area); menu.toggle($event)"
+                  [outlined]="true"
+                  severity="info"
+                ></button>
+              </div>
+            </ng-template>
           </td>
         </tr>
       </ng-template>

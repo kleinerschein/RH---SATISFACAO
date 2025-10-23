@@ -53,6 +53,7 @@ import { FinalizadoComponent } from './components/pesquisa/finalizado/finalizado
 import { ChartModule } from 'primeng/chart';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ModalBoasVindasComponent } from './components/modal-boas-vindas/modal-boas-vindas.component';
+import { ModalEditarComponent } from './components/perguntas/modal-editar/modal-editar.component';
 
 
 //-----------------------------------------------//
@@ -75,6 +76,7 @@ import { ModalBoasVindasComponent } from './components/modal-boas-vindas/modal-b
     ResponderComponent,
     FinalizadoComponent,
     ModalBoasVindasComponent,
+    ModalEditarComponent,
   ],
   imports: [
     // Importação dos módulos

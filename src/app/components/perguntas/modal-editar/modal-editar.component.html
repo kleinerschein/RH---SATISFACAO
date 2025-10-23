@@ -1,0 +1,66 @@
+<div class="home-container">
+  <div class="content">
+    <section class="header">
+      <h2 class="title">Cadastrar Pergunta</h2>
+      <button
+        pButton
+        icon="pi pi-save"
+        label="Salvar"
+        style="align-self: flex-start; height: 2rem"
+        [outlined]="true"
+        [severity]="'contrast'"
+        [style]="{ width: '150px', marginBottom: '1rem' }"
+        (click)="editarPergunta()"
+      ></button>
+    </section>
+    <p-divider [style]="{ marginTop: '8px', marginBottom: '8px' }"></p-divider>
+
+    <div>
+      <p style="text-align: start">Pergunta</p>
+      <p-divider
+        [style]="{ marginTop: '-0.5rem', marginBottom: '8px' }"
+      ></p-divider>
+    </div>
+
+    <input
+      pInputText
+      id="nome"
+      [(ngModel)]="pergunta"
+      showDelay="500"
+      tooltipPosition="top"
+      pTooltip="Nome da Pergunta a ser cadastrada"
+      placeholder="Digite a pergunta"
+      style="width: 100%"
+    />
+
+    <div>
+      <p style="text-align: start">Selecione uma Categoria</p>
+      <p-divider
+        [style]="{ marginTop: '-0.5rem', marginBottom: '8px' }"
+      ></p-divider>
+    </div>
+
+    <p-listbox
+      [options]="categorias"
+      [(ngModel)]="categoria"
+      optionLabel="nome"
+      optionValue="id"
+    />
+
+    <div>
+
+    <p style="text-align: start">Pergunta é Descritiva</p>
+    <p-divider
+      [style]="{ marginTop: '-0.5rem', marginBottom: '8px' }"
+    ></p-divider>
+  </div>
+
+  <p-listbox
+    pSelectButton
+    [options]="opcoes"
+    [(ngModel)]="perguntaAberta"
+    optionLabel="name"
+    optionValue="value"
+  />
+  </div>
+</div>

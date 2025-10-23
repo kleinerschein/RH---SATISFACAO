@@ -18,7 +18,20 @@ export class ListarPerguntasComponent implements OnInit {
     { field: 'pergunta', header: 'Pergunta' },
     { field: 'categoria', header: 'Categoria' },
     { field: 'descritiva', header: 'Descritiva' },
-    { field: 'excluir', header: 'Excluir' },
+    { field: 'acoes', header: 'Ações' },
+  ];
+
+  items = [
+    {
+      label: 'Editar',
+      icon: 'pi pi-pencil',
+      command: () => this.editarPergunta(this.perguntaSelecionada),
+    },
+    {
+      label: 'Excluir',
+      icon: 'pi pi-trash',
+      command: () => this.excluirPergunta(this.perguntaSelecionada),
+    },
   ];
 
   constructor(
@@ -39,11 +52,16 @@ export class ListarPerguntasComponent implements OnInit {
   }
 
   onRowSelect(event: any) {
-    this.perguntaSelecionada = event.data;
+    this.perguntaSelecionada = event;
   }
 
   cadastrarPergunta() {
     this.router.navigate(['/perguntas/cadastrar']);
+  }
+
+  editarPergunta(pergunta: any) {
+    console.log('Editando pergunta:', this.perguntaSelecionada);
+    this.router.navigate(['/perguntas/editar', pergunta.id]);
   }
 
   excluirPergunta(pergunta: any) {
@@ -67,4 +85,5 @@ export class ListarPerguntasComponent implements OnInit {
         });
       });
   }
+
 }

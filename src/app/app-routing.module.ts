@@ -12,6 +12,7 @@ import { ListarPerguntasComponent } from './components/perguntas/listar-pergunta
 import { CadastrarPerguntaComponent } from './components/perguntas/cadastrar-pergunta/cadastrar-pergunta.component';
 import { ResponderComponent } from './components/pesquisa/responder/responder.component';
 import { FinalizadoComponent } from './components/pesquisa/finalizado/finalizado.component';
+import { ModalEditarComponent } from './components/perguntas/modal-editar/modal-editar.component';
 
 
 //------------------------------//
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'areas/atualizar/:id', component: AtualizarSetorComponent },
   { path: 'perguntas/cadastrar', component: CadastrarPerguntaComponent },
   { path: 'perguntas/listar', component: ListarPerguntasComponent },
+  { path: 'perguntas/editar/:id', component: ModalEditarComponent },
   { path: 'pesquisa/responder', component: ResponderComponent }, // Rota para responder pesquisa
   { path: 'pesquisa/responder/finalizar', component: FinalizadoComponent }, // Rota para finalizar pesquisa
 ];

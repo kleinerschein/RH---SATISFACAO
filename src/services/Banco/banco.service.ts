@@ -151,7 +151,7 @@ export class BancoService {
   ) {
     try {
       const query = `INSERT INTO pergunta(\`pergunta\`, \`categoria_id\`, \`descritiva\`) VALUES ('${pergunta}', ${categoriaId}, ${descritiva})`;
-      
+
       const response = await this.consultarBanco(query);
       if (response && response.affectedRows) {
         return response;
@@ -174,6 +174,37 @@ export class BancoService {
       'SELECT pergunta.id, pergunta,pergunta,pergunta.descritiva,categoria.nome as categoria FROM pergunta LEFT outer join categoria on pergunta.categoria_id = categoria.id';
     const perguntas = await this.consultarBanco(query);
     return perguntas;
+  }
+
+  /*
+   * Método para consultar uma pergunta específica pelo ID
+   * @param id ID da pergunta a ser consultada
+   * @returns Um Observable com o resultado da consulta
+   **/
+  async getPerguntaById(id: string): Promise<any> {
+    const query = `SELECT pergunta.id, pergunta.pergunta, pergunta.descritiva, categoria.id as categoria_id, categoria.nome as categoria FROM pergunta LEFT outer join categoria on pergunta.categoria_id = categoria.id WHERE pergunta.id = ${id}`;
+    return this.consultarBanco(query).then((data) => data[0]);
+  }
+
+  /*  * Método para editar uma pergunta no banco de dados
+   * @param id ID da pergunta a ser editada
+   * @param pergunta Novo texto da pergunta
+   *  @param categoriaId Novo ID da categoria associada à pergunta
+   * @param descritiva Indica se a pergunta é descritiva (1) ou não (0)
+   * @returns Um Observable com o resultado da edição
+   * */
+  async editarPergunta(
+    id: string,
+    pergunta: string,
+    categoriaId: number,
+    descritiva: number
+  ) {
+    const query = `UPDATE pergunta SET pergunta = '${pergunta}', categoria_id = ${categoriaId}, descritiva = ${descritiva} WHERE id = ${id}`;
+    const response = await this.consultarBanco(query);
+    if (!response || !response.affectedRows) {
+      throw new Error('Erro ao editar pergunta: ' + (response?.message || ''));
+    }
+    return response;
   }
 
   /*   * Método para excluir uma pergunta do banco de dados
