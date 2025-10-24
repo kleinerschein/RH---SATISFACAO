@@ -55,7 +55,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { ModalBoasVindasComponent } from './components/pesquisa/modal-boas-vindas/modal-boas-vindas.component';
 import { ModalEditarComponent } from './components/perguntas/modal-editar/modal-editar.component';
 import { LinksComponent } from './components/pesquisa/links/links.component';
-
+import { ClipboardModule } from '@angular/cdk/clipboard';
 //-----------------------------------------------//
 // Configuração do módulo principal da aplicação //
 //-----------------------------------------------//
@@ -117,7 +117,8 @@ import { LinksComponent } from './components/pesquisa/links/links.component';
     ListboxModule,
     DropdownModule,
     ChartModule,
-    SkeletonModule
+    SkeletonModule,
+    ClipboardModule
   ],
   providers: [], // Provedores de serviços
   bootstrap: [AppComponent], // Componente inicial

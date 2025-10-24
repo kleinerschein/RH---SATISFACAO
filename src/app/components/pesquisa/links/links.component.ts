@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ModalLoadingComponent } from '../../modal-loading/modal-loading.component';
 import { WhatsappService } from '../../../../services/whatsapp/whatsapp.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-links',
@@ -38,9 +39,17 @@ export class LinksComponent implements OnInit {
       label: 'Copiar Link',
       icon: 'pi pi-copy',
       command: () => {
-        navigator.clipboard.writeText(
-          `http://92.113.34.132:4280/pesquisa/responder/${this.linkSelecionado.uuid}`
-        );
+        if(!this.linkSelecionado.uuid || this.linkSelecionado.status == 1) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Nenhum link válido',
+            detail: 'O link selecionado é inválido.',
+          });
+
+          return;
+        }
+        const texto =`http://92.113.34.132:4280/pesquisa/responder/${this.linkSelecionado.uuid}`
+        this.clipboard.copy(texto);
 
         this.messageService.add({
           severity: 'success',
@@ -67,7 +76,8 @@ export class LinksComponent implements OnInit {
     private bancoService: BancoService,
     private whatsappService: WhatsappService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private clipboard: Clipboard,
   ) {}
 
   onRowSelect(event: any) {
