@@ -95,13 +95,14 @@ export class LinksComponent implements OnInit {
   }
 
   async gerarLink() {
+    const uuid = uuidv4();
     this.bancoService
-      .atualizaUuidLink(this.linkSelecionado.numero, uuidv4())
+      .atualizaUuidLink(this.linkSelecionado.numero, uuid)
       .then(() => {
         this.consultaLinks();
       })
       .then(() => {
-        this.whatsappService.sendMessage(`http://92.113.34.132:4280/pesquisa/responder/${this.linkSelecionado.uuid}`, this.linkSelecionado.numero);
+        this.whatsappService.sendMessage(`http://92.113.34.132:4280/pesquisa/responder/${uuid}`, this.linkSelecionado.numero);
         this.messageService.add({
           severity: 'success',
           summary: 'Link Gerado',
