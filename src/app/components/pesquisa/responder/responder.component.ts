@@ -17,9 +17,9 @@ import { ModalBoasVindasComponent } from '../modal-boas-vindas/modal-boas-vindas
   templateUrl: './responder.component.html',
   styleUrl: './responder.component.css',
 })
-
 export class ResponderComponent implements OnInit {
-  @ViewChild(ModalBoasVindasComponent) modalBoasVindas!: ModalBoasVindasComponent;
+  @ViewChild(ModalBoasVindasComponent)
+  modalBoasVindas!: ModalBoasVindasComponent;
 
   id: string = '';
   isValidId: boolean = false;
@@ -43,6 +43,13 @@ export class ResponderComponent implements OnInit {
     { label: 'Masculino', value: 'M' },
     { label: 'Feminino', value: 'F' },
     { label: 'Outro', value: 'O' },
+  ];
+
+  idadeOptions = [
+    { label: 'Entre 16 e 25 anos', value: '1' },
+    { label: 'Entre 26 e 40 anos', value: '2' },
+    { label: 'Entre 41 e 60 anos', value: '3' },
+    { label: 'Acima de 60 anos', value: '4' },
   ];
 
   generoOptions = [
@@ -73,20 +80,20 @@ export class ResponderComponent implements OnInit {
     private bancoService: BancoService,
     private messageService: MessageService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
   async ngOnInit() {
     await this.validaId();
 
-    if(!this.isValidId){
+    if (!this.isValidId) {
       this.displayModalLinkInvalido = true;
       this.modalBoasVindas?.hide();
       return;
     }
 
     this.modalBoasVindas?.show();
-    
+
     const response = await this.bancoService.consultarCategoriasEPerguntas();
     this.categorias = response;
 
@@ -94,7 +101,7 @@ export class ResponderComponent implements OnInit {
 
     this.areas = this.areas.map((area) => ({
       ...area,
-      nome: area.nome + " | " + area.descricao,
+      nome: area.nome + ' | ' + area.descricao,
     }));
 
     this.form = this.fb.group({
@@ -111,7 +118,6 @@ export class ResponderComponent implements OnInit {
     });
 
     this.loading = false;
-    
   }
 
   get respostas(): FormArray {
@@ -180,12 +186,12 @@ export class ResponderComponent implements OnInit {
     return index + j;
   }
 
-  async validaId(){
+  async validaId() {
     this.id = this.route.snapshot.paramMap.get('id') || '';
 
     const isValid = await this.bancoService.validaUuidLink(this.id);
 
-    if(!isValid){
+    if (!isValid) {
       this.messageService.add({
         severity: 'error',
         summary: 'ID Inválido',
@@ -195,7 +201,7 @@ export class ResponderComponent implements OnInit {
       this.isValidId = false;
       return;
     }
-    
+
     this.isValidId = isValid;
   }
 }

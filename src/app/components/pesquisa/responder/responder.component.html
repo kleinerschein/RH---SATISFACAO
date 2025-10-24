@@ -123,14 +123,14 @@
           <div>
             <h3 class="categoria-titulo">Qual sua idade</h3>
             <p-divider class="divider"></p-divider>
-            <input
-              type="number"
-              class="input-idade"
+
+            <p-dropdown
+              [options]="idadeOptions"
+              optionLabel="label"
+              optionValue="value"
               formControlName="idade"
-              pInputText
-              placeholder="Digite sua idade"
-              style="width: 100%"
-            />
+              [style]="{ width: '100%'}"
+            ></p-dropdown>
 
             <p
               *ngIf="form.get('idade')?.invalid && form.get('idade')?.touched"
@@ -265,16 +265,16 @@
 <app-modal-boas-vindas></app-modal-boas-vindas>
 
 <!--  MODAL ID INVÁLIDO  -->
-  <p-dialog
-    header="Link Inválido"
-    [(visible)]="displayModalLinkInvalido"
-    [modal]="true"
-    [closable]="false"
-    [dismissableMask]="true"
-    [style]="{ width: '400px' }"
-    >
-    <p>O link acessado é inválido. Por favor, verifique o link ou entre em contato com o administrador.</p>
-
-  </p-dialog>
-
-  
+<p-dialog
+  header="Link Inválido"
+  [(visible)]="displayModalLinkInvalido"
+  [modal]="true"
+  [closable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '400px' }"
+>
+  <p>
+    O link acessado é inválido. Por favor, verifique o link ou entre em contato
+    com o administrador.
+  </p>
+</p-dialog>
