@@ -82,11 +82,6 @@ export class AppComponent implements OnInit {
         icon: 'pi pi-search',
         items: [
           {
-            label: 'Responder',
-            icon: 'pi pi-pencil',
-            routerLink: ['/pesquisa/responder'],
-          },
-          {
             label: 'Links',
             icon: 'pi pi-link',
             routerLink: ['/pesquisa/link'],
