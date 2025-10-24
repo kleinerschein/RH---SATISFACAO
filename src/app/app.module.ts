@@ -52,9 +52,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FinalizadoComponent } from './components/pesquisa/finalizado/finalizado.component';
 import { ChartModule } from 'primeng/chart';
 import { SkeletonModule } from 'primeng/skeleton';
-import { ModalBoasVindasComponent } from './components/modal-boas-vindas/modal-boas-vindas.component';
+import { ModalBoasVindasComponent } from './components/pesquisa/modal-boas-vindas/modal-boas-vindas.component';
 import { ModalEditarComponent } from './components/perguntas/modal-editar/modal-editar.component';
-
+import { LinksComponent } from './components/pesquisa/links/links.component';
 
 //-----------------------------------------------//
 // Configuração do módulo principal da aplicação //
@@ -77,6 +77,7 @@ import { ModalEditarComponent } from './components/perguntas/modal-editar/modal-
     FinalizadoComponent,
     ModalBoasVindasComponent,
     ModalEditarComponent,
+    LinksComponent,
   ],
   imports: [
     // Importação dos módulos

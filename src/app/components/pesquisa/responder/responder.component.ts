@@ -9,8 +9,8 @@ import {
 import { BancoService } from '../../../../services/Banco/banco.service';
 import { Area } from '../../../../types/area';
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
-import { ModalBoasVindasComponent } from '../../modal-boas-vindas/modal-boas-vindas.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ModalBoasVindasComponent } from '../modal-boas-vindas/modal-boas-vindas.component';
 
 @Component({
   selector: 'app-responder',
@@ -21,6 +21,9 @@ import { ModalBoasVindasComponent } from '../../modal-boas-vindas/modal-boas-vin
 export class ResponderComponent implements OnInit {
   @ViewChild(ModalBoasVindasComponent) modalBoasVindas!: ModalBoasVindasComponent;
 
+  id: string = '';
+  isValidId: boolean = false;
+  displayModalLinkInvalido: boolean = false;
   form!: FormGroup;
   idade!: number;
   areas: Area[] = [];
@@ -69,11 +72,21 @@ export class ResponderComponent implements OnInit {
     private fb: FormBuilder,
     private bancoService: BancoService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   async ngOnInit() {
+    await this.validaId();
+
+    if(!this.isValidId){
+      this.displayModalLinkInvalido = true;
+      this.modalBoasVindas?.hide();
+      return;
+    }
+
     this.modalBoasVindas?.show();
+    
     const response = await this.bancoService.consultarCategoriasEPerguntas();
     this.categorias = response;
 
@@ -98,6 +111,7 @@ export class ResponderComponent implements OnInit {
     });
 
     this.loading = false;
+    
   }
 
   get respostas(): FormArray {
@@ -105,7 +119,7 @@ export class ResponderComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.valid) {
+    if (this.form.valid && this.isValidId) {
       const respostasForm = this.respostas.value;
 
       // Índice para acompanhar o controle correto
@@ -137,6 +151,8 @@ export class ResponderComponent implements OnInit {
         });
       });
 
+      this.bancoService.atualizaStatusLinkPorUuid(this.id, '1');
+
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
@@ -144,7 +160,7 @@ export class ResponderComponent implements OnInit {
       });
 
       setTimeout(() => {
-        this.router.navigate(['/pesquisa/responder/finalizar']);
+        this.router.navigate([`/pesquisa/responder/${this.id}/finalizar`]);
       }, 1000);
     } else {
       this.form.markAllAsTouched();
@@ -162,5 +178,24 @@ export class ResponderComponent implements OnInit {
       index += this.categorias[x].perguntas.length;
     }
     return index + j;
+  }
+
+  async validaId(){
+    this.id = this.route.snapshot.paramMap.get('id') || '';
+
+    const isValid = await this.bancoService.validaUuidLink(this.id);
+
+    if(!isValid){
+      this.messageService.add({
+        severity: 'error',
+        summary: 'ID Inválido',
+        detail: 'Pesquisa inválida ou já respondida!',
+      });
+
+      this.isValidId = false;
+      return;
+    }
+    
+    this.isValidId = isValid;
   }
 }

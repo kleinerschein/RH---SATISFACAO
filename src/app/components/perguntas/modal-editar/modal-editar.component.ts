@@ -26,7 +26,7 @@ export class ModalEditarComponent {
   constructor(
     private banco: BancoService,
     private messageService: MessageService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, 
     private router: Router
   ) {}
 
@@ -36,14 +36,11 @@ export class ModalEditarComponent {
     this.carregarPergunta();
   }
 
-
   carregarPergunta() {
     this.banco.getPerguntaById(this.id).then((data) => {
-      console.log('Dados da pergunta carregada:', data);
       this.pergunta = data.pergunta;
       this.categoria = this.categorias.find(c => c.id === data.categoria_id).id;
       this.perguntaAberta = data.descritiva
-
     });
   }
 

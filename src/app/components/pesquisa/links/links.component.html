@@ -1,0 +1,104 @@
+<div class="container">
+  <div class="content">
+    <p-table
+      #dt2
+      [value]="links"
+      [columns]="columns"
+      dataKey="id"
+      [paginator]="true"
+      [rows]="5"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [globalFilterFields]="['numero', 'nome', 'status']"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      class="tabela-areas"
+      selectionMode="single"
+      [(selection)]="linkSelecionado"
+      (onRowSelect)="onRowSelect($event)"
+    >
+
+     <!-- Campo de filtro -->
+      <ng-template pTemplate="caption">
+        <div
+          class="flex"
+          style="
+            width: 100%;
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+          "
+        >
+          <div style="flex-grow: 1">
+            <p-iconField iconPosition="left" [style]="{ width: '100%' }">
+              <p-inputIcon>
+                <i class="pi pi-search"></i>
+              </p-inputIcon>
+              <input
+                pInputText
+                type="text"
+                (input)="applyFilter($event)"
+                placeholder="Filtro de busca..."
+                style="width: 100%"
+              />
+            </p-iconField>
+          </div>
+
+          <button
+            pButton
+            icon="pi pi-plus"
+            label="Gerar Links"
+            styleClass="ml-2"
+            severity="contrast"
+            [outlined]="true"
+            (click)="gerarLinkGeral()"
+          ></button>
+        </div>
+      </ng-template>
+
+      <!-- Cabeçalho da Tabela -->
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+            {{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+
+      <!-- Corpo da Tabela -->
+      <ng-template pTemplate="body" let-area let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns">
+            <ng-container *ngIf="col.field !== 'acoes'; else acoesTemplate">
+              {{ area[col.field] }}
+            </ng-container>
+
+            <ng-template #acoesTemplate>
+              <div class="centered">
+                <p-menu
+                  #menu
+                  [popup]="true"
+                  appendTo="body"
+                  [model]="items"
+                ></p-menu>
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-cog"
+                  label="Ações"
+                  (click)="onRowSelect(area); menu.toggle($event)"
+                  [outlined]="true"
+                  severity="info"
+                ></button>
+              </div>
+            </ng-template>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+
+
+<app-modal-loading></app-modal-loading>

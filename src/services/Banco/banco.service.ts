@@ -338,4 +338,48 @@ ORDER BY a.nome, p.pergunta;
 `;
     return this.consultarBanco(query);
   }
+
+  async getLinks(): Promise<any[]> {
+    const query = 'SELECT * FROM links';
+    return await this.consultarBanco(query);
+  }
+
+  async atualizaUuidLink(numero: number, uuid: string): Promise<any> {
+    const query = `UPDATE links SET uuid = '${uuid}', status = 0 WHERE numero = ${numero}`;
+    const response = await this.consultarBanco(query);
+    return response;
+  }
+
+  async atualizaStatusLink(numero: number, status: string): Promise<any> {
+    const query = `UPDATE links SET status = '${status}' WHERE numero = ${numero}`;
+    const response = await this.consultarBanco(query);
+    return response;
+  }
+
+  async atualizaStatusLinkPorUuid(uuid: string, status: string): Promise<any> {
+    const query = `UPDATE links SET status = '${status}' WHERE uuid = '${uuid}'`;
+    const response = await this.consultarBanco(query);
+    return response;
+  }
+
+  async validaUuidLink(uuid: string): Promise<any> {
+    const query = `SELECT 1 as EXISTE FROM links WHERE uuid = '${uuid}' and status = 0`;
+    const response = await this.consultarBanco(query);
+
+    if (response.length == 0) {
+      return false;
+    }
+
+    if (response[0].EXISTE == 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  async limparRespostas() {
+    const query = `DELETE FROM respostas`;
+    const response = await this.consultarBanco(query);
+    return response;
+  }
 }

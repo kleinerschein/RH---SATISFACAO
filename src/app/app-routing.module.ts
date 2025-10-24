@@ -13,6 +13,7 @@ import { CadastrarPerguntaComponent } from './components/perguntas/cadastrar-per
 import { ResponderComponent } from './components/pesquisa/responder/responder.component';
 import { FinalizadoComponent } from './components/pesquisa/finalizado/finalizado.component';
 import { ModalEditarComponent } from './components/perguntas/modal-editar/modal-editar.component';
+import { LinksComponent } from './components/pesquisa/links/links.component';
 
 
 //------------------------------//
@@ -27,8 +28,9 @@ const routes: Routes = [
   { path: 'perguntas/cadastrar', component: CadastrarPerguntaComponent },
   { path: 'perguntas/listar', component: ListarPerguntasComponent },
   { path: 'perguntas/editar/:id', component: ModalEditarComponent },
-  { path: 'pesquisa/responder', component: ResponderComponent }, // Rota para responder pesquisa
-  { path: 'pesquisa/responder/finalizar', component: FinalizadoComponent }, // Rota para finalizar pesquisa
+  { path: 'pesquisa/responder/:id', component: ResponderComponent },
+  { path: 'pesquisa/responder/:id/finalizar', component: FinalizadoComponent },
+  { path: 'pesquisa/link', component: LinksComponent}
 ];
 
 //---------------------------//

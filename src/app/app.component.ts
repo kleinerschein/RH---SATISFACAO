@@ -5,6 +5,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { CookiesService } from './helpers/cookies/cookies.service';
 import { ModalLoadingComponent } from './components/modal-loading/modal-loading.component';
 import { CadastrarCategoriaComponent } from './components/perguntas/cadastrar-categoria/cadastrar-categoria.component';
+import { BancoService } from '../services/Banco/banco.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,8 @@ export class AppComponent implements OnInit {
   constructor(
     public router: Router,
     private route: ActivatedRoute,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private banco: BancoService
   ) {}
 
   ngOnInit(): void {
@@ -76,9 +78,25 @@ export class AppComponent implements OnInit {
         ],
       },
       {
-        label: 'Responder',
-        icon: 'pi pi-pencil',
-        routerLink: ['/pesquisa/responder'],
+        label: 'Pesquisa',
+        icon: 'pi pi-search',
+        items: [
+          {
+            label: 'Responder',
+            icon: 'pi pi-pencil',
+            routerLink: ['/pesquisa/responder'],
+          },
+          {
+            label: 'Links',
+            icon: 'pi pi-link',
+            routerLink: ['/pesquisa/link'],
+          },
+          {
+            label: 'Limpar Respostas',
+            icon: 'pi pi-trash',
+            command: () => this.limparRespostas(),
+          }
+        ],
       },
     ];
 
@@ -134,5 +152,19 @@ export class AppComponent implements OnInit {
       'pesquisa/responder'
     );
     return estaRespondendo;
+  }
+
+  async limparRespostas() {
+    this.confirmationService.confirm({
+      header: 'Limpar Respostas',
+      message: 'Você realmente deseja limpar todas as respostas?',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: async () => {
+        await this.banco.limparRespostas();
+        window.location.reload();
+      },
+    });
   }
 }

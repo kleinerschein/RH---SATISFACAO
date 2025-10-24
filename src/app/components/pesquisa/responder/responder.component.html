@@ -263,3 +263,18 @@
 </div>
 <p-toast></p-toast>
 <app-modal-boas-vindas></app-modal-boas-vindas>
+
+<!--  MODAL ID INVÁLIDO  -->
+  <p-dialog
+    header="Link Inválido"
+    [(visible)]="displayModalLinkInvalido"
+    [modal]="true"
+    [closable]="false"
+    [dismissableMask]="true"
+    [style]="{ width: '400px' }"
+    >
+    <p>O link acessado é inválido. Por favor, verifique o link ou entre em contato com o administrador.</p>
+
+  </p-dialog>
+
+  
