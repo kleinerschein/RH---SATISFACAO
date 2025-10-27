@@ -6,6 +6,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ModalLoadingComponent } from '../../modal-loading/modal-loading.component';
 import { WhatsappService } from '../../../../services/whatsapp/whatsapp.service';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { EncurtadorUrlService } from '../../../../services/encurtadorUrl/encurtador-url.service';
 
 @Component({
   selector: 'app-links',
@@ -17,7 +18,6 @@ export class LinksComponent implements OnInit {
   @ViewChild(ModalLoadingComponent) modalLoading!: ModalLoadingComponent;
   links: any = [];
   linkSelecionado: any = null;
-  
 
   items: any = [
     {
@@ -39,7 +39,7 @@ export class LinksComponent implements OnInit {
       label: 'Copiar Link',
       icon: 'pi pi-copy',
       command: () => {
-        if(!this.linkSelecionado.uuid || this.linkSelecionado.status == 1) {
+        if (!this.linkSelecionado.uuid || this.linkSelecionado.status == 1) {
           this.messageService.add({
             severity: 'warn',
             summary: 'Nenhum link válido',
@@ -48,7 +48,7 @@ export class LinksComponent implements OnInit {
 
           return;
         }
-        const texto =`http://92.113.34.132:4280/pesquisa/responder/${this.linkSelecionado.uuid}`
+        const texto = `http://92.113.34.132:4280/pesquisa/responder/${this.linkSelecionado.uuid}`;
         this.clipboard.copy(texto);
 
         this.messageService.add({
@@ -78,6 +78,7 @@ export class LinksComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private clipboard: Clipboard,
+    private encurtadorUrlService: EncurtadorUrlService
   ) {}
 
   onRowSelect(event: any) {
@@ -100,24 +101,35 @@ export class LinksComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.gerarLink();
-      }
+      },
     });
   }
 
   async gerarLink() {
+    this.modalLoading.startLoading();
     const uuid = uuidv4();
     this.bancoService
       .atualizaUuidLink(this.linkSelecionado.numero, uuid)
       .then(() => {
         this.consultaLinks();
       })
-      .then(() => {
-        this.whatsappService.sendMessage(`http://92.113.34.132:4280/pesquisa/responder/${uuid}`, this.linkSelecionado.numero);
+      .then(async () => {
+        const link = await this.encurtadorUrlService.encurtarUrl(
+          `http://92.113.34.132:4280/pesquisa/responder/${uuid}`
+        );
+        console.log(link);
+        this.whatsappService.sendMessage(
+          link.encurtada,
+          this.linkSelecionado.numero
+        );
+
         this.messageService.add({
           severity: 'success',
           summary: 'Link Gerado',
           detail: 'O link foi gerado com sucesso!',
         });
+
+        this.modalLoading.stopLoading();
       });
   }
 
@@ -136,20 +148,44 @@ export class LinksComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.gerarLinksParaTodos();
-      }
+      },
     });
-
   }
   async gerarLinksParaTodos() {
     this.modalLoading.startLoading();
 
-    await Promise.all(
-      this.links.map((link: any) => {
-        if (link.uuid) return;
-        this.bancoService.atualizaUuidLink(link.numero, uuidv4());
-        return this.whatsappService.sendMessage(`http://92.113.34.132:4280/pesquisa/responder/${link.uuid}`, link.numero);
-      })
-    );
+    const linksPendentes = this.links.filter((link: any) => !link.uuid);
+    const RATE_LIMIT = 20; // 30 requisições por minuto
+    const INTERVAL = 60 * 1000; // 1 minuto em ms
+
+    for (let i = 0; i < linksPendentes.length; i += RATE_LIMIT) {
+      const lote = linksPendentes.slice(i, i + RATE_LIMIT);
+
+      await Promise.all(
+        lote.map(async (link: any) => {
+          const uuid = uuidv4();
+
+          console.log(`Gerando link para ${link.numero} com UUID ${uuid}`);
+
+          await this.bancoService.atualizaUuidLink(link.numero, uuid);
+
+          const linkEncurtado = await this.encurtadorUrlService.encurtarUrl(
+            `http://92.113.34.132:4280/pesquisa/responder/${uuid}`
+          );
+
+          return this.whatsappService.sendMessage(
+            linkEncurtado.encurtada,
+            link.numero
+          );
+        })
+      );
+
+      // Se não for o último lote, espera 1 minuto antes de processar o próximo
+      if (i + RATE_LIMIT < linksPendentes.length) {
+        console.log(`Aguardando 1 minuto para continuar o próximo lote...`);
+        await new Promise((resolve) => setTimeout(resolve, INTERVAL));
+      }
+    }
 
     await this.consultaLinks();
 
@@ -176,6 +212,7 @@ export class LinksComponent implements OnInit {
       this.linkSelecionado.numero,
       status
     );
+
     await this.consultaLinks();
     this.messageService.add({
       severity: 'success',

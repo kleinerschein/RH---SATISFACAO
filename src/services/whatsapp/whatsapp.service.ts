@@ -11,8 +11,17 @@ export class WhatsappService {
   constructor(private http: HttpClient) {}
 
   async sendMessage(message: string, to: string) {
+    const mensagem = `Convidamos você a participar da pesquisa de clima da Kleiner 2025.
+Queremos ouvir você!
+Nos ajude a construir um ambiente de trabalho mais saudável e positivo!
+Acesse o link abaixo para responder a pesquisa de forma rápida e anônima:
+${message}
+Sua opinião é muito importante para nós!
+Agradecemos sua participação!`;
+
+
     const payload = {
-      text: message,
+      text: mensagem,
       phone: to,
     };
 
