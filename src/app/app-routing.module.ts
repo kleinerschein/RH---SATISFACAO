@@ -13,23 +13,27 @@ import { ResponderComponent } from './components/pesquisa/responder/responder.co
 import { FinalizadoComponent } from './components/pesquisa/finalizado/finalizado.component';
 import { ModalEditarComponent } from './components/perguntas/modal-editar/modal-editar.component';
 import { LinksComponent } from './components/pesquisa/links/links.component';
+import { LoginComponent } from './components/login/login.component';
+import { authGuard } from './guards/auth.guard';
 
 
 //------------------------------//
 // Define as rotas da aplicação //
 //------------------------------//
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'areas/cadastrar', component: CadastrarSetorComponent },
-  { path: 'areas/listar', component: ListarSetoresComponent },
-  { path: 'areas/atualizar/:id', component: AtualizarSetorComponent },
-  { path: 'perguntas/cadastrar', component: CadastrarPerguntaComponent },
-  { path: 'perguntas/listar', component: ListarPerguntasComponent },
-  { path: 'perguntas/editar/:id', component: ModalEditarComponent },
+  { path: '', component: HomeComponent, canActivate: [authGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [authGuard] },
+  { path: 'areas/cadastrar', component: CadastrarSetorComponent, canActivate: [authGuard] },
+  { path: 'areas/listar', component: ListarSetoresComponent, canActivate: [authGuard] },
+  { path: 'areas/atualizar/:id', component: AtualizarSetorComponent, canActivate: [authGuard] },
+  { path: 'perguntas/cadastrar', component: CadastrarPerguntaComponent, canActivate: [authGuard] },
+  { path: 'perguntas/listar', component: ListarPerguntasComponent, canActivate: [authGuard] },
+  { path: 'perguntas/editar/:id', component: ModalEditarComponent, canActivate: [authGuard] },
   { path: 'pesquisa/responder/:id', component: ResponderComponent },
   { path: 'pesquisa/responder/:id/finalizar', component: FinalizadoComponent },
-  { path: 'pesquisa/link', component: LinksComponent}
+  { path: 'pesquisa/link', component: LinksComponent, canActivate: [authGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: '**', redirectTo: '/login' }
 ];
 
 //---------------------------//

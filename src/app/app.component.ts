@@ -7,6 +7,7 @@ import { ModalLoadingComponent } from './components/modal-loading/modal-loading.
 import { CadastrarCategoriaComponent } from './components/perguntas/cadastrar-categoria/cadastrar-categoria.component';
 import { BancoService } from '../services/Banco/banco.service';
 import { v4 as uuidv4 } from 'uuid';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -30,17 +31,24 @@ export class AppComponent implements OnInit {
     private banco: BancoService
   ) {}
 
-  ngOnInit(): void {
-    const urlAtual = this.router.url;
-    console.log('URL Atual no AppComponent:', urlAtual);
+  async ngOnInit() {
+    const urlAtual = window.location.href;
+
+    const uuid = uuidv4();
+
+    if (!this.isLoggedIn() && !urlAtual.includes('pesquisa/responder')) {
+      this.router.navigate(['/login'], { replaceUrl: true });
+      return;
+    }
+
     if (
       this.pesquisaAtiva &&
-      urlAtual.includes('pesquisa/responder/')
+      urlAtual.includes('pesquisa/responder/') &&
+      urlAtual.includes('finalizar') &&
+      urlAtual.includes('login')
     ) {
-      const uuid = uuidv4();
-
       this.router.navigate([`/pesquisa/responder/${uuid}`], {
-        replaceUrl: true, 
+        replaceUrl: true,
       });
 
       return;
@@ -128,10 +136,7 @@ export class AppComponent implements OnInit {
   isLoggedIn(): boolean {
     const cookie = new CookiesService();
 
-    return (
-      cookie.getCookie('logado') === 'true' ||
-      !this.router.url.includes('pesquisa/responder')
-    );
+    return cookie.getCookie('logado') === 'true';
   }
 
   //----------------------//

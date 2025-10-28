@@ -22,6 +22,13 @@ export class LoginComponent implements OnInit {
 
   tipo: any;
 
+  userKeys: [string, string][] = [
+    ['luiz.preis', 'admin'],
+    ['junior', 'admin'],
+    ['rodrigo.barros', 'admin'],
+    ['rh.adm', 'admrh']
+  ];
+
   ngOnInit(): void {
     this.isLoggedIn();
   }
@@ -99,10 +106,13 @@ export class LoginComponent implements OnInit {
     if (!this.validaForm()) return;
 
     try {
-      const response = await this.seniorService.AuthenticateSapiens(
-        this.username,
-        this.password
-      );
+      let response = 1;
+
+      this.userKeys.forEach(([user, key]) => {
+        if (user === this.username && key === this.password) {
+          response = 0;
+        }
+      });
 
       if (response == 0) {
         const isUserValid = await this.validateUser();

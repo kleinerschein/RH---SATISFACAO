@@ -170,17 +170,30 @@ export class HomeComponent {
         })),
       };
 
-      console.log(dadosQtdRespostasArea);
+      const dadosQtdRespostasArea2 = dadosQtdRespostasArea.map((d: any) => {
+        switch (d.nome) {
+          case 'Área 1': return { ...d, total_respostas: (d.total_respostas / 20) * 100};
+          case 'Área 2': return { ...d, total_respostas: (d.total_respostas / 31) * 100};
+          case 'Área 3': return { ...d, total_respostas: (d.total_respostas / 25) * 100};
+          case 'Área 4': return { ...d, total_respostas: (d.total_respostas / 17) * 100};
+          case 'Área 5': return { ...d, total_respostas: (d.total_respostas / 12) * 100 };
+          case 'Área 6': return { ...d, total_respostas: (d.total_respostas / 85) * 100 };
+          case 'Área 7': return { ...d, total_respostas: (d.total_respostas / 14) * 100 };
+          default: return d;
+        }
+      });
+
+      console.log(dadosQtdRespostasArea2);
       this.chartQtdRespostasArea = {
-        labels: dadosQtdRespostasArea?.map((d: any) => d.nome) ?? [],
+        labels: dadosQtdRespostasArea2?.map((d: any) => d.nome) ?? [],
         datasets: [
           {
-            label: 'Quantidade de Respostas por Área',
-            data: dadosQtdRespostasArea?.map((d: any) => d.total_respostas) ?? [],
-            backgroundColor: this.getColor(0),
-            borderColor: this.getColor(0),
-            fill: false,
-            tension: 0.4,
+        label: 'Quantidade de Respostas por Área (%)',
+        data: dadosQtdRespostasArea2?.map((d: any) => Number(Number(d.total_respostas).toFixed(2))) ?? [],
+        backgroundColor: dadosQtdRespostasArea2?.map((_: any, i: number) => this.getColor(i)) ?? [],
+        borderColor: dadosQtdRespostasArea2?.map((_: any, i: number) => this.getColor(i)) ?? [],
+        fill: false,
+        tension: 0.4,
           },
         ],
       };
