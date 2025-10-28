@@ -185,7 +185,7 @@ export class HomeComponent {
 
       console.log(dadosQtdRespostasArea2);
       this.chartQtdRespostasArea = {
-        labels: dadosQtdRespostasArea2?.map((d: any) => d.nome) ?? [],
+        labels: dadosQtdRespostasArea2?.map((d: any) => d.descricao) ?? [],
         datasets: [
           {
         label: 'Quantidade de Respostas por Área (%)',

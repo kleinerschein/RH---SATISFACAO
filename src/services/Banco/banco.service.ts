@@ -342,6 +342,7 @@ ORDER BY a.nome, p.pergunta;
   async quantidadeRespostasPorArea(){
     const query = `SELECT 
   areas.nome,
+  areas.descricao,
   round(COUNT(*) / 34) AS total_respostas
 FROM respostas
 join areas on respostas.area_id = areas.id

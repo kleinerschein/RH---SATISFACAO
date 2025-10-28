@@ -76,13 +76,14 @@ export class LoginComponent implements OnInit {
 
   async validateUser() {
     try {
+      return true
       // const groups64 = await this.seniorService.getUserGroup(this.username);
       // const decoded = Base64Helper.decode(groups64);
 
       // this.cookies.setCookie('grupos', decoded.replace(/;/g, ','), 24);
       
       
-      return true
+      
 
       this.messageService.add({
         severity: 'warn',
