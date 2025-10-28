@@ -4,7 +4,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { LoginComponent } from './components/login/login.component';
 import { CadastrarSetorComponent } from './components/setores/cadastrar-setor/cadastrar-setor.component';
 import { ListarSetoresComponent } from './components/setores/listar-setores/listar-setores.component';
 import { AtualizarSetorComponent } from './components/setores/atualizar-setor/atualizar-setor.component';

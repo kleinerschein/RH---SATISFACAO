@@ -339,6 +339,17 @@ ORDER BY a.nome, p.pergunta;
     return this.consultarBanco(query);
   }
 
+  async quantidadeRespostasPorArea(){
+    const query = `SELECT 
+  areas.nome,
+  round(COUNT(*) / 34) AS total_respostas
+FROM respostas
+join areas on respostas.area_id = areas.id
+GROUP BY area_id;
+`;
+    return this.consultarBanco(query);
+  }
+
   async getLinks(): Promise<any[]> {
     const query = 'SELECT * FROM links';
     return await this.consultarBanco(query);

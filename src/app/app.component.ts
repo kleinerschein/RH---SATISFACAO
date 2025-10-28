@@ -6,6 +6,7 @@ import { CookiesService } from './helpers/cookies/cookies.service';
 import { ModalLoadingComponent } from './components/modal-loading/modal-loading.component';
 import { CadastrarCategoriaComponent } from './components/perguntas/cadastrar-categoria/cadastrar-categoria.component';
 import { BancoService } from '../services/Banco/banco.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,8 @@ export class AppComponent implements OnInit {
   cadastrarCategoria!: CadastrarCategoriaComponent;
 
   items: MenuItem[] = [];
+  history = window.history;
+  pesquisaAtiva: boolean = true;
 
   constructor(
     public router: Router,
@@ -28,8 +31,18 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (!this.isLoggedIn()) {
-      this.router.navigate(['']);
+    const urlAtual = this.router.url;
+    console.log('URL Atual no AppComponent:', urlAtual);
+    if (
+      this.pesquisaAtiva &&
+      urlAtual.includes('pesquisa/responder/')
+    ) {
+      const uuid = uuidv4();
+
+      this.router.navigate([`/pesquisa/responder/${uuid}`], {
+        replaceUrl: true, 
+      });
+
       return;
     }
 
@@ -90,7 +103,7 @@ export class AppComponent implements OnInit {
             label: 'Limpar Respostas',
             icon: 'pi pi-trash',
             command: () => this.limparRespostas(),
-          }
+          },
         ],
       },
     ];

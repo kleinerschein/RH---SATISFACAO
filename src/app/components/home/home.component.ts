@@ -21,6 +21,7 @@ export class HomeComponent {
   chartNotaPergunta: any;
   chartFaixaEtariaData: any;
   chartAreaCategoria: any;
+  chartQtdRespostasArea: any;
 
   constructor(private bancoService: BancoService) {}
 
@@ -36,6 +37,7 @@ export class HomeComponent {
         dadosNotaPergunta,
         dadosFaixaEtaria,
         dadosAreaCategoria,
+        dadosQtdRespostasArea
       ] = await Promise.all([
         this.bancoService.getMediaNotasPorCategoria(),
         this.bancoService.getMediaNotasPorArea(),
@@ -44,6 +46,7 @@ export class HomeComponent {
         this.bancoService.notasPorPergunta(),
         this.bancoService.faixaEtaria(),
         this.bancoService.categoriaEArea(),
+        this.bancoService.quantidadeRespostasPorArea()
       ]);
 
       const generoColors: Record<string, { bg: string; border: string }> = {
@@ -145,6 +148,8 @@ export class HomeComponent {
             tension: 0.4,
           },
         ],
+
+
       };
 
       const categorias = Array.from(new Set(dadosAreaCategoria?.map((d: any) => d.categoria) ?? []));
@@ -163,6 +168,21 @@ export class HomeComponent {
           fill: false,
           tension: 0.4,
         })),
+      };
+
+      console.log(dadosQtdRespostasArea);
+      this.chartQtdRespostasArea = {
+        labels: dadosQtdRespostasArea?.map((d: any) => d.nome) ?? [],
+        datasets: [
+          {
+            label: 'Quantidade de Respostas por Área',
+            data: dadosQtdRespostasArea?.map((d: any) => d.total_respostas) ?? [],
+            backgroundColor: this.getColor(0),
+            borderColor: this.getColor(0),
+            fill: false,
+            tension: 0.4,
+          },
+        ],
       };
 
       this.chartOptions = {

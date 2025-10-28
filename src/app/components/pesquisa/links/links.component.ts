@@ -180,7 +180,6 @@ export class LinksComponent implements OnInit {
         })
       );
 
-      // Se não for o último lote, espera 1 minuto antes de processar o próximo
       if (i + RATE_LIMIT < linksPendentes.length) {
         console.log(`Aguardando 1 minuto para continuar o próximo lote...`);
         await new Promise((resolve) => setTimeout(resolve, INTERVAL));
