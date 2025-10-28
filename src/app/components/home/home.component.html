@@ -49,13 +49,15 @@
       </div>
     </div>
 
-    <div class="grafico">
-      <h4>Quantidade de Respostas por Área</h4>
-      <p-chart
-        type="bar"
-        [data]="chartQtdRespostasArea"
-        [options]="chartOptions"
-      ></p-chart>
+    <div class="linha-grafico">
+      <div class="grafico-expandido">
+        <h4>Quantidade de Respostas por Área</h4>
+        <p-chart
+          type="bar"
+          [data]="chartQtdRespostasArea"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
     </div>
 
     <div class="linha-grafico full-width">
