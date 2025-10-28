@@ -76,10 +76,10 @@ export class LoginComponent implements OnInit {
 
   async validateUser() {
     try {
-      const groups64 = await this.seniorService.getUserGroup(this.username);
-      const decoded = Base64Helper.decode(groups64);
+      // const groups64 = await this.seniorService.getUserGroup(this.username);
+      // const decoded = Base64Helper.decode(groups64);
 
-      this.cookies.setCookie('grupos', decoded.replace(/;/g, ','), 24);
+      // this.cookies.setCookie('grupos', decoded.replace(/;/g, ','), 24);
       
       
       return true
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit {
       let response = 1;
 
       this.userKeys.forEach(([user, key]) => {
-        if (user === this.username && key === this.password) {
+        if (user == this.username && key == this.password) {
           response = 0;
         }
       });
