@@ -60,6 +60,18 @@
       </div>
     </div>
 
+
+    <div class="linha-grafico" style="justify-content: center;">
+      <div class="grafico-expandido-mid">
+        <h4>Porcentagem de Respostas por Área</h4>
+        <p-chart
+          type="bar"
+          [data]="chartPorcentagemRespostasArea"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
+    </div>
+
     <div class="linha-grafico full-width">
       <div class="grafico-expandido">
         <h4>Notas por Pergunta</h4>
