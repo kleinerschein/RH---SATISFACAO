@@ -266,7 +266,7 @@ export class BancoService {
   }
 
   async getMediaNotasPorArea() {
-    const query = `SELECT a.nome AS area, ROUND(AVG(r.nota), 2) AS media FROM respostas r JOIN pergunta p ON r.pergunta_id = p.id JOIN areas a ON r.area_id = a.id where p.descritiva = 0 GROUP BY a.nome;`;
+    const query = `SELECT a.nome AS area, ROUND(AVG(r.nota), 2) AS media, a.descricao FROM respostas r JOIN pergunta p ON r.pergunta_id = p.id JOIN areas a ON r.area_id = a.id where p.descritiva = 0 GROUP BY a.nome, a.descricao;`;
     return this.consultarBanco(query);
   }
 

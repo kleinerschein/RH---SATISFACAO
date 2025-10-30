@@ -76,8 +76,12 @@ export class HomeComponent {
         ],
       };
 
+      console.log(dadosArea);
+      const dadosArea2 = dadosArea.map((area: any) => {
+        console.log(area.descricao);
+      })
       this.chartAreaData = {
-        labels: dadosArea?.map((area: any) => area.area) ?? [],
+        labels: dadosArea?.map((area: any) => area.descricao) ?? [],
         datasets: [
           {
             label: 'Média das Notas por Área',

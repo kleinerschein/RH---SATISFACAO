@@ -18,15 +18,6 @@
           [options]="chartOptions"
         ></p-chart>
       </div>
-
-      <div class="grafico">
-        <h4>Média por Área</h4>
-        <p-chart
-          type="line"
-          [data]="chartAreaData"
-          [options]="chartOptions"
-        ></p-chart>
-      </div>
     </div>
 
     <div class="linha-grafico">
@@ -49,7 +40,18 @@
       </div>
     </div>
 
-    <div class="linha-grafico" style="justify-content: center;">
+    <div class="linha-grafico" style="justify-content: center">
+      <div class="grafico-expandido-mid">
+        <h4>Média por Área</h4>
+        <p-chart
+          type="line"
+          [data]="chartAreaData"
+          [options]="chartOptions"
+        ></p-chart>
+      </div>
+    </div>
+
+    <div class="linha-grafico" style="justify-content: center">
       <div class="grafico-expandido-mid">
         <h4>Quantidade de Respostas por Área</h4>
         <p-chart
@@ -60,8 +62,7 @@
       </div>
     </div>
 
-
-    <div class="linha-grafico" style="justify-content: center;">
+    <div class="linha-grafico" style="justify-content: center">
       <div class="grafico-expandido-mid">
         <h4>Porcentagem de Respostas por Área</h4>
         <p-chart
