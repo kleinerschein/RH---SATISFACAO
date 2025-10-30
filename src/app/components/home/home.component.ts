@@ -80,6 +80,7 @@ export class HomeComponent {
       const dadosArea2 = dadosArea.map((area: any) => {
         console.log(area.descricao);
       })
+
       this.chartAreaData = {
         labels: dadosArea?.map((area: any) => area.descricao) ?? [],
         datasets: [
@@ -183,9 +184,9 @@ export class HomeComponent {
           case 'Área 2': return { ...d, total_respostas: (d.total_respostas / 31) * 100};
           case 'Área 3': return { ...d, total_respostas: (d.total_respostas / 25) * 100};
           case 'Área 4': return { ...d, total_respostas: (d.total_respostas / 17) * 100};
-          case 'Área 5': return { ...d, total_respostas: (d.total_respostas / 12) * 100};
-          case 'Área 6': return { ...d, total_respostas: (d.total_respostas / 85) * 100};
-          case 'Área 7': return { ...d, total_respostas: (d.total_respostas / 14) * 100};
+          case 'Área 5': return { ...d, total_respostas: (d.total_respostas / 14) * 100};
+          case 'Área 6': return { ...d, total_respostas: (d.total_respostas / 89) * 100};
+          case 'Área 7': return { ...d, total_respostas: (d.total_respostas / 25) * 100};
           default: return d;
         }
       });
