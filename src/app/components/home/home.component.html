@@ -9,6 +9,11 @@
         (click)="downloadExcell()"
       ></button>
     </div>
+
+    <div class="grafico">
+      <h3>Média Geral: {{ mediaGeral }}</h3>
+    </div>
+
     <div class="linha-grafico">
       <div class="grafico">
         <h4>Média Geral por Categoria</h4>
@@ -16,6 +21,8 @@
           type="bar"
           [data]="chartData"
           [options]="chartOptions"
+          [height]="'300px'"
+          [width]="'500px'"
         ></p-chart>
       </div>
     </div>
@@ -24,18 +31,22 @@
       <div class="grafico">
         <h4>Distribuição por Sexo</h4>
         <p-chart
-          type="pie"
+          type="bar"
           [data]="chartSexoData"
           [options]="chartOptions"
+          [height]="'300px'"
+          [width]="'500px'"
         ></p-chart>
       </div>
 
       <div class="grafico">
         <h4>Distribuição por Gênero</h4>
         <p-chart
-          type="doughnut"
+          type="bar"
           [data]="chartGeneroData"
           [options]="chartOptions"
+          [height]="'300px'"
+          [width]="'500px'"
         ></p-chart>
       </div>
     </div>
@@ -47,6 +58,7 @@
           type="line"
           [data]="chartAreaData"
           [options]="chartOptions"
+          [height]="'400px'"
         ></p-chart>
       </div>
     </div>
@@ -58,6 +70,7 @@
           type="bar"
           [data]="chartQtdRespostasArea"
           [options]="chartOptions"
+          [height]="'400px'"
         ></p-chart>
       </div>
     </div>
@@ -69,6 +82,7 @@
           type="bar"
           [data]="chartPorcentagemRespostasArea"
           [options]="chartOptions"
+          [height]="'400px'"
         ></p-chart>
       </div>
     </div>
@@ -80,6 +94,7 @@
           type="bar"
           [data]="chartNotaPergunta"
           [options]="chartOptions"
+          [height]="'400px'"
         ></p-chart>
       </div>
     </div>
@@ -106,6 +121,7 @@
           type="bar"
           [data]="chartAreaCategoria"
           [options]="chartOptions"
+          [height]="'400px'"
         ></p-chart>
       </div>
     </div>

@@ -2,81 +2,47 @@ import * as ExcelJS from 'exceljs';
 import * as FileSaver from 'file-saver';
 
 export class Excel {
-  static exportToExcel(data: any[], filename: string): void {
+  /**
+   * Exporta múltiplos datasets (cada um vira uma aba)
+   * @param datasets - objeto { nomeAba: dados[] }
+   * @param filename - nome do arquivo Excel
+   */
+  static exportMultipleToExcel(datasets: Record<string, any[]>, filename: string): void {
     const workbook = new ExcelJS.Workbook();
 
-    /** ========================
-     *  ABA 1: Respostas Brutas
-     =========================== */
-    const worksheet1 = workbook.addWorksheet('Respostas GPTW');
+    // 🔹 Cria uma aba para cada conjunto de dados
+    Object.entries(datasets).forEach(([sheetName, data], index) => {
+      const worksheet = workbook.addWorksheet(this.formatSheetName(sheetName, index));
 
-    const columns = Object.keys(data[0] || {}).map(key => ({
-      header: key.toUpperCase(),
-      key,
-      width: 20,
-    }));
-    worksheet1.columns = columns;
-
-    data.forEach(item => {
-      const row = worksheet1.addRow(item);
-
-      if ('media' in item) {
-        const media = Number(item.media);
-        const cell = row.getCell('media');
-
-        cell.fill = this.getMediaFill(media);
-        cell.font = { bold: true };
+      if (!data || data.length === 0) {
+        worksheet.addRow(['Sem dados disponíveis']);
+        return;
       }
-    });
 
-    /** ========================
-     *  ABA 2: Resumo por Área
-     =========================== */
-    const worksheet2 = workbook.addWorksheet('Resumo por Área');
+      // Define colunas com base nas chaves do primeiro objeto
+      const columns = Object.keys(data[0]).map(key => ({
+        header: key.toUpperCase(),
+        key,
+        width: 22,
+      }));
+      worksheet.columns = columns;
 
-    // Agrupamento: categoria > pergunta > área = média
-    const grouped: Record<string, Record<string, Record<string, number>>> = {};
+      // Adiciona linhas
+      data.forEach(item => {
+        const row = worksheet.addRow(item);
 
-    data.forEach((item) => {
-      const { categoria, pergunta, area, media } = item;
-
-      if (!grouped[categoria]) grouped[categoria] = {};
-      if (!grouped[categoria][pergunta]) grouped[categoria][pergunta] = {};
-      grouped[categoria][pergunta][area] = Number(media);
-    });
-
-    const areas = Array.from(new Set(data.map(d => d.area)));
-
-    // Cabeçalho
-    worksheet2.addRow(['Categoria', 'Pergunta', ...areas]);
-
-    // Dados
-    Object.entries(grouped).forEach(([categoria, perguntas]) => {
-      Object.entries(perguntas).forEach(([pergunta, areaMedias]) => {
-        const rowData = [categoria, pergunta];
-
-        areas.forEach(area => {
-          rowData.push(areaMedias[area] !== undefined ? areaMedias[area].toString() : '');
-        });
-
-        const row = worksheet2.addRow(rowData);
-
-        // Estilo condicional nas células das áreas
-        areas.forEach((area, idx) => {
-          const media = areaMedias[area];
-          if (media !== undefined) {
-            const cell = row.getCell(idx + 3); // +3 por causa de Categoria e Pergunta
-            cell.fill = this.getMediaFill(media);
-            cell.font = { bold: true };
-          }
-        });
+        // Se existir campo "media", aplica destaque visual
+        if ('media' in item) {
+          const media = Number(item.media);
+          const cell = row.getCell('media');
+          cell.fill = this.getMediaFill(media);
+          cell.font = { bold: true };
+        }
       });
     });
 
-    /** ========================
-     *  Salvar Excel
-     =========================== */
-    workbook.xlsx.writeBuffer().then((buffer) => {
+    // 🔹 Salva o arquivo Excel
+    workbook.xlsx.writeBuffer().then(buffer => {
       const blob = new Blob([buffer], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
@@ -84,7 +50,7 @@ export class Excel {
     });
   }
 
-  /** Cor de preenchimento conforme média */
+  /** 🔹 Mantido: método para gerar a cor conforme média */
   private static getMediaFill(media: number): ExcelJS.Fill {
     let color = 'FFFFFF'; // Branco padrão
 
@@ -98,5 +64,11 @@ export class Excel {
       pattern: 'solid',
       fgColor: { argb: color },
     };
+  }
+
+  /** 🔹 Formata nomes de abas (máx 31 caracteres e sem caracteres inválidos) */
+  private static formatSheetName(name: string, index: number): string {
+    const clean = name.replace(/[^a-zA-Z0-9 ]/g, ' ').substring(0, 28);
+    return `${index + 1} - ${clean}`;
   }
 }

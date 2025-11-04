@@ -23,6 +23,7 @@ export class HomeComponent {
   chartAreaCategoria: any;
   chartQtdRespostasArea: any;
   chartPorcentagemRespostasArea: any;
+  mediaGeral: number | null = null;
 
   constructor(private bancoService: BancoService) {}
 
@@ -39,7 +40,8 @@ export class HomeComponent {
         dadosFaixaEtaria,
         dadosAreaCategoria,
         dadosQtdRespostasArea,
-        dadosPorcentagemRespostasArea
+        dadosPorcentagemRespostasArea,
+        dadosMediaGeral
       ] = await Promise.all([
         this.bancoService.getMediaNotasPorCategoria(),
         this.bancoService.getMediaNotasPorArea(),
@@ -50,8 +52,10 @@ export class HomeComponent {
         this.bancoService.categoriaEArea(),
         this.bancoService.quantidadeRespostasPorArea(),
         this.bancoService.quantidadeRespostasPorArea(),
+        this.bancoService.mediaGeral()
       ]);
 
+      this.mediaGeral = dadosMediaGeral?.[0]?.media_geral ?? null;
       const generoColors: Record<string, { bg: string; border: string }> = {
         H: { bg: 'rgba(33,150,243,0.2)', border: '#2196F3' },
         HO: { bg: 'rgba(156,39,176,0.2)', border: '#9C27B0' },
@@ -160,6 +164,7 @@ export class HomeComponent {
 
       };
 
+      console.log(dadosAreaCategoria);
       const categorias = Array.from(new Set(dadosAreaCategoria?.map((d: any) => d.categoria) ?? []));
       const areasUnicas = Array.from(new Set(dadosAreaCategoria?.map((d: any) => d.area) ?? [])) as string[];
 
@@ -271,8 +276,7 @@ export class HomeComponent {
 
   async downloadExcell() {
     this.modalLoading?.startLoading();
-    const dados = await this.bancoService.dowloadPesquisa()
-    Excel.exportToExcel(dados, 'pesquisa');
+    const dados = await this.bancoService.downloadPesquisa()
     this.modalLoading?.stopLoading();
   }
 }

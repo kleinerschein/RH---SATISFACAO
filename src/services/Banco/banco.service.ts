@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, firstValueFrom } from 'rxjs';
 import { Area } from '../../types/area';
 import { Resposta } from '../../types/resposta';
+import { Excel } from '../exell/excel';
 
 @Injectable({
   providedIn: 'root',
@@ -261,12 +262,12 @@ export class BancoService {
   //  METODOS DOS IDENTIFICADORES //
   //------------------------------//
   async getMediaNotasPorCategoria() {
-    const query = `SELECT c.nome AS categoria, ROUND(AVG(r.nota), 2) AS media FROM respostas r JOIN pergunta p ON r.pergunta_id = p.id JOIN categoria c ON p.categoria_id = c.id where p.descritiva = 0 GROUP BY c.nome;`;
+    const query = `SELECT c.nome AS categoria, ROUND(AVG(r.nota), 2) AS media FROM respostas r JOIN pergunta p ON r.pergunta_id = p.id JOIN categoria c ON p.categoria_id = c.id where p.descritiva = 0 and r.nota <> 0 GROUP BY c.nome;`;
     return this.consultarBanco(query);
   }
 
   async getMediaNotasPorArea() {
-    const query = `SELECT a.nome AS area, ROUND(AVG(r.nota), 2) AS media, a.descricao FROM respostas r JOIN pergunta p ON r.pergunta_id = p.id JOIN areas a ON r.area_id = a.id where p.descritiva = 0 GROUP BY a.nome, a.descricao;`;
+    const query = `SELECT a.nome AS area, ROUND(AVG(r.nota), 2) AS media, a.descricao FROM respostas r JOIN pergunta p ON r.pergunta_id = p.id JOIN areas a ON r.area_id = a.id where p.descritiva = 0 and r.nota <> 0 GROUP BY a.nome, a.descricao;`;
     return this.consultarBanco(query);
   }
 
@@ -302,7 +303,7 @@ GROUP BY faixa_etaria;
   }
 
   async categoriaEArea() {
-    const query = `SELECT a.nome AS area, c.nome AS categoria, ROUND(AVG(r.nota), 2) AS media
+    const query = `SELECT a.descricao AS area, c.nome AS categoria, ROUND(AVG(r.nota), 2) AS media
 FROM respostas r
 JOIN areas a ON r.area_id = a.id
 JOIN pergunta p ON r.pergunta_id = p.id
@@ -314,30 +315,78 @@ GROUP BY a.nome, c.nome;
     return this.consultarBanco(query);
   }
 
-  async dowloadPesquisa() {
-    const query = `SELECT 
-a.nome AS area,
-c.nome as categoria,
-p.pergunta,
-r.nota,
-r.sexo,
-r.genero,
-r.idade,
-r.texto,
-COUNT(*) AS quantidade,
-ROUND(AVG(r.nota) OVER (PARTITION BY p.id), 2) AS media
-FROM respostas r
-JOIN pergunta p ON r.pergunta_id = p.id
-JOIN areas a ON r.area_id = a.id
-join categoria c on c.id = p.categoria_id 
-GROUP BY a.nome, p.pergunta, r.nota, p.id,
-r.sexo,
-r.genero,
-r.idade
-ORDER BY a.nome, p.pergunta;
-`;
-    return this.consultarBanco(query);
-  }
+  async downloadPesquisa() {
+  const queries = {
+    respostas_brutas: `
+      SELECT a.descricao AS area, c.nome as categoria, p.pergunta, r.nota, r.sexo, r.genero, r.idade, r.texto,
+      COUNT(*) AS quantidade, ROUND(AVG(r.nota) OVER (PARTITION BY p.id), 2) AS media
+      FROM respostas r
+      JOIN pergunta p ON r.pergunta_id = p.id
+      JOIN areas a ON r.area_id = a.id
+      JOIN categoria c ON c.id = p.categoria_id 
+      GROUP BY a.nome, p.pergunta, r.nota, p.id, r.sexo, r.genero, r.idade
+      ORDER BY a.nome, p.pergunta;
+    `,
+    media_por_pergunta: `
+      SELECT p.pergunta, ROUND(AVG(r.nota),2) AS media
+      FROM respostas r 
+      JOIN pergunta p ON r.pergunta_id = p.id 
+      WHERE p.descritiva = 0 AND r.nota <> 0
+      GROUP BY p.pergunta;
+    `,
+    media_por_sexo: `
+      SELECT sexo, ROUND(AVG(nota), 2) AS media FROM respostas WHERE nota <> 0 GROUP BY sexo;
+    `,
+    media_por_area: `
+      SELECT a.descricao AS area, ROUND(AVG(r.nota), 2) AS media
+      FROM respostas r 
+      JOIN pergunta p ON r.pergunta_id = p.id 
+      JOIN areas a ON r.area_id = a.id 
+      WHERE p.descritiva = 0 AND r.nota <> 0 
+      GROUP BY a.descricao;
+    `,
+    media_por_categoria: `
+      SELECT c.nome AS categoria, ROUND(AVG(r.nota), 2) AS media
+      FROM respostas r 
+      JOIN pergunta p ON r.pergunta_id = p.id 
+      JOIN categoria c ON p.categoria_id = c.id 
+      WHERE p.descritiva = 0 AND r.nota <> 0 
+      GROUP BY c.nome;
+    `,
+    media_por_area_categoria: `
+      SELECT a.descricao AS area, c.nome AS categoria, ROUND(AVG(r.nota), 2) AS media
+      FROM respostas r
+      JOIN areas a ON r.area_id = a.id
+      JOIN pergunta p ON r.pergunta_id = p.id
+      JOIN categoria c ON p.categoria_id = c.id
+      WHERE p.descritiva = 0 AND r.nota <> 0 
+      GROUP BY a.descricao, c.nome;
+    `,
+    media_por_pergunta_area: `
+      SELECT a.descricao AS area, p.pergunta, ROUND(AVG(r.nota),2) AS media
+      FROM respostas r 
+      JOIN pergunta p ON r.pergunta_id = p.id 
+      JOIN areas a ON r.area_id = a.id 
+      WHERE p.descritiva = 0 AND r.nota <> 0
+      GROUP BY a.descricao, p.pergunta 
+      ORDER BY a.descricao, p.pergunta;
+    `
+  };
+
+  // 🔹 Executa todas as consultas
+  const results = await Promise.all(
+    Object.entries(queries).map(async ([name, sql]) => {
+      const data = await this.consultarBanco(sql);
+      return [name, data];
+    })
+  );
+
+  // 🔹 Converte em objeto para o método exportMultipleToExcel
+  const datasets = Object.fromEntries(results);
+
+  // 🔹 Exporta para Excel com múltiplas abas
+  Excel.exportMultipleToExcel(datasets, 'PesquisaGPTW');
+}
 
   async quantidadeRespostasPorArea(){
     const query = `SELECT 
@@ -387,6 +436,11 @@ GROUP BY area_id;
     }
 
     return true;
+  }
+
+  async mediaGeral(){
+    const query = `SELECT ROUND(AVG(nota), 2) AS media_geral FROM respostas where nota > 0;`;
+    return this.consultarBanco(query);
   }
 
   async limparRespostas() {
