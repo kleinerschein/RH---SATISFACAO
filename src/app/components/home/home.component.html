@@ -16,11 +16,12 @@
 
     <div class="linha-grafico">
       <div class="grafico">
-        <h4>Média Geral por Categoria</h4>
+        <h4>Resultado Geral por Dimensão</h4>
         <p-chart
           type="bar"
           [data]="chartData"
           [options]="chartOptions"
+          [plugins]="chartPlugins"
           [height]="'300px'"
           [width]="'500px'"
         ></p-chart>
@@ -34,6 +35,7 @@
           type="bar"
           [data]="chartSexoData"
           [options]="chartOptions"
+          [plugins]="chartPlugins"
           [height]="'300px'"
           [width]="'500px'"
         ></p-chart>
@@ -45,6 +47,7 @@
           type="bar"
           [data]="chartGeneroData"
           [options]="chartOptions"
+          [plugins]="chartPlugins"
           [height]="'300px'"
           [width]="'500px'"
         ></p-chart>
@@ -53,11 +56,12 @@
 
     <div class="linha-grafico" style="justify-content: center">
       <div class="grafico-expandido-mid">
-        <h4>Média por Área</h4>
+        <h4>Resultado por Área (%)</h4>
         <p-chart
-          type="line"
+          type="bar"
           [data]="chartAreaData"
           [options]="chartOptions"
+          [plugins]="chartPlugins"
           [height]="'400px'"
         ></p-chart>
       </div>
@@ -65,11 +69,12 @@
 
     <div class="linha-grafico" style="justify-content: center">
       <div class="grafico-expandido-mid">
-        <h4>Quantidade de Respostas por Área</h4>
+        <h4>Respondentes por Área (QTDE)</h4>
         <p-chart
           type="bar"
           [data]="chartQtdRespostasArea"
           [options]="chartOptions"
+          [plugins]="chartPlugins"
           [height]="'400px'"
         ></p-chart>
       </div>
@@ -77,11 +82,12 @@
 
     <div class="linha-grafico" style="justify-content: center">
       <div class="grafico-expandido-mid">
-        <h4>Porcentagem de Respostas por Área</h4>
+        <h4>Respondentes por Área (%)</h4>
         <p-chart
           type="bar"
           [data]="chartPorcentagemRespostasArea"
           [options]="chartOptions"
+          [plugins]="chartPlugins"
           [height]="'400px'"
         ></p-chart>
       </div>
@@ -89,11 +95,12 @@
 
     <div class="linha-grafico full-width">
       <div class="grafico-expandido">
-        <h4>Notas por Pergunta</h4>
+        <h4>Resultado por Pergunta</h4>
         <p-chart
           type="bar"
           [data]="chartNotaPergunta"
           [options]="chartOptions"
+          [plugins]="chartPlugins"
           [height]="'400px'"
         ></p-chart>
       </div>
@@ -109,6 +116,7 @@
             type="doughnut"
             [data]="chartFaixaEtariaData"
             [options]="chartOptions"
+            [plugins]="chartPlugins"
           ></p-chart>
         </div>
       </div>
@@ -116,11 +124,12 @@
 
     <div class="linha-grafico">
       <div class="grafico-expandido">
-        <h4>Média por Categoria e Área</h4>
+        <h4>Média por Dimensão e Área</h4>
         <p-chart
           type="bar"
           [data]="chartAreaCategoria"
           [options]="chartOptions"
+          [plugins]="chartPlugins"
           [height]="'400px'"
         ></p-chart>
       </div>

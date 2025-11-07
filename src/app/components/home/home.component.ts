@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { BancoService } from '../../../services/Banco/banco.service';
 import { ModalLoadingComponent } from '../modal-loading/modal-loading.component';
 import { Excel } from '../../../services/exell/excel';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-home',
@@ -11,9 +12,10 @@ import { Excel } from '../../../services/exell/excel';
 export class HomeComponent {
   @ViewChild(ModalLoadingComponent)
   modalLoading!: ModalLoadingComponent;
-  
+
   chartData: any;
   chartOptions: any;
+  chartPlugins = [ChartDataLabels];
 
   chartAreaData: any;
   chartSexoData: any;
@@ -41,7 +43,7 @@ export class HomeComponent {
         dadosAreaCategoria,
         dadosQtdRespostasArea,
         dadosPorcentagemRespostasArea,
-        dadosMediaGeral
+        dadosMediaGeral,
       ] = await Promise.all([
         this.bancoService.getMediaNotasPorCategoria(),
         this.bancoService.getMediaNotasPorArea(),
@@ -52,7 +54,7 @@ export class HomeComponent {
         this.bancoService.categoriaEArea(),
         this.bancoService.quantidadeRespostasPorArea(),
         this.bancoService.quantidadeRespostasPorArea(),
-        this.bancoService.mediaGeral()
+        this.bancoService.mediaGeral(),
       ]);
 
       this.mediaGeral = dadosMediaGeral?.[0]?.media_geral ?? null;
@@ -73,7 +75,7 @@ export class HomeComponent {
         labels: dados?.map((d: any) => d.categoria) ?? [],
         datasets: [
           {
-            label: 'Média das Notas por Categoria',
+            label: '',
             data: dados?.map((d: any) => d.media) ?? [],
             backgroundColor: '#42A5F5',
           },
@@ -83,7 +85,7 @@ export class HomeComponent {
       console.log(dadosArea);
       const dadosArea2 = dadosArea.map((area: any) => {
         console.log(area.descricao);
-      })
+      });
 
       this.chartAreaData = {
         labels: dadosArea?.map((area: any) => area.descricao) ?? [],
@@ -101,13 +103,27 @@ export class HomeComponent {
 
       this.chartSexoData = {
         labels:
-          dadosSexo?.map((d: any) => d.sexo === 'M' ? 'Masculino' : d.sexo === 'F' ? 'Feminino' : d.sexo === 'O' ? 'Outros' : d.sexo) ?? [],
+          dadosSexo?.map((d: any) =>
+            d.sexo === 'M'
+              ? 'Masculino'
+              : d.sexo === 'F'
+              ? 'Feminino'
+              : d.sexo === 'O'
+              ? 'Outros'
+              : d.sexo
+          ) ?? [],
         datasets: [
           {
             label: 'Média das Notas por Sexo',
             data: dadosSexo?.map((d: any) => d.media) ?? [],
-            backgroundColor: dadosSexo?.map((d: any) => sexoColors[d.sexo]?.bg ?? 'rgba(233,30,99,0.2)') ?? [],
-            borderColor: dadosSexo?.map((d: any) => sexoColors[d.sexo]?.border ?? '#E91E63') ?? [],
+            backgroundColor:
+              dadosSexo?.map(
+                (d: any) => sexoColors[d.sexo]?.bg ?? 'rgba(233,30,99,0.2)'
+              ) ?? [],
+            borderColor:
+              dadosSexo?.map(
+                (d: any) => sexoColors[d.sexo]?.border ?? '#E91E63'
+              ) ?? [],
             fill: true,
             tension: 0.4,
           },
@@ -118,19 +134,30 @@ export class HomeComponent {
         labels:
           dadosGenero?.map((d: any) => {
             switch (d.genero) {
-              case 'H': return 'Heterossexual';
-              case 'HO': return 'Homossexual';
-              case 'B': return 'Bissexual';
-              case 'A': return 'Assexual';
-              default: return d.genero;
+              case 'H':
+                return 'Heterossexual';
+              case 'HO':
+                return 'Homossexual';
+              case 'B':
+                return 'Bissexual';
+              case 'A':
+                return 'Assexual';
+              default:
+                return d.genero;
             }
           }) ?? [],
         datasets: [
           {
             label: 'Média das Notas por Gênero',
             data: dadosGenero?.map((d: any) => d.media) ?? [],
-            backgroundColor: dadosGenero?.map((d: any) => generoColors[d.genero]?.bg ?? 'rgba(233,30,99,0.2)') ?? [],
-            borderColor: dadosGenero?.map((d: any) => generoColors[d.genero]?.border ?? '#E91E63') ?? [],
+            backgroundColor:
+              dadosGenero?.map(
+                (d: any) => generoColors[d.genero]?.bg ?? 'rgba(233,30,99,0.2)'
+              ) ?? [],
+            borderColor:
+              dadosGenero?.map(
+                (d: any) => generoColors[d.genero]?.border ?? '#E91E63'
+              ) ?? [],
             fill: true,
             tension: 0.4,
           },
@@ -138,12 +165,15 @@ export class HomeComponent {
       };
 
       this.chartNotaPergunta = {
-        labels: dadosNotaPergunta?.map((d: any) => d.pergunta.slice(0, 50) + '...') ?? [],
+        labels:
+          dadosNotaPergunta?.map((d: any) => d.pergunta.slice(0, 50) + '...') ??
+          [],
         datasets: [
           {
             label: 'Média das Notas por Pergunta',
             data: dadosNotaPergunta?.map((d: any) => Number(d.nota)) ?? [],
-            backgroundColor: dadosNotaPergunta?.map(() => this.getRandomColor()) ?? [],
+            backgroundColor:
+              dadosNotaPergunta?.map(() => this.getRandomColor()) ?? [],
           },
         ],
       };
@@ -154,26 +184,32 @@ export class HomeComponent {
           {
             label: 'Média das Notas por Faixa Etária',
             data: dadosFaixaEtaria?.map((d: any) => Number(d.media)) ?? [],
-            backgroundColor: dadosFaixaEtaria?.map(() => this.getRandomColor()) ?? [],
-            borderColor: dadosFaixaEtaria?.map(() => this.getRandomColor()) ?? [],
+            backgroundColor:
+              dadosFaixaEtaria?.map(() => this.getRandomColor()) ?? [],
+            borderColor:
+              dadosFaixaEtaria?.map(() => this.getRandomColor()) ?? [],
             fill: true,
             tension: 0.4,
           },
         ],
-
-
       };
 
       console.log(dadosAreaCategoria);
-      const categorias = Array.from(new Set(dadosAreaCategoria?.map((d: any) => d.categoria) ?? []));
-      const areasUnicas = Array.from(new Set(dadosAreaCategoria?.map((d: any) => d.area) ?? [])) as string[];
+      const categorias = Array.from(
+        new Set(dadosAreaCategoria?.map((d: any) => d.categoria) ?? [])
+      );
+      const areasUnicas = Array.from(
+        new Set(dadosAreaCategoria?.map((d: any) => d.area) ?? [])
+      ) as string[];
 
       this.chartAreaCategoria = {
         labels: categorias,
         datasets: areasUnicas.map((area: string, index: number) => ({
           label: area,
           data: categorias.map((cat) => {
-            const item = dadosAreaCategoria.find((d: any) => d.area === area && d.categoria === cat);
+            const item = dadosAreaCategoria.find(
+              (d: any) => d.area === area && d.categoria === cat
+            );
             return item ? Number(item.media) : 0;
           }),
           backgroundColor: this.getColor(index),
@@ -181,31 +217,50 @@ export class HomeComponent {
           fill: false,
           tension: 0.4,
         })),
-      }; 
+      };
 
-      const dadosQtdRespostasArea2 = dadosPorcentagemRespostasArea.map((d: any) => {
-        switch (d.nome) {
-          case 'Área 1': return { ...d, total_respostas: (d.total_respostas / 20) * 100};
-          case 'Área 2': return { ...d, total_respostas: (d.total_respostas / 31) * 100};
-          case 'Área 3': return { ...d, total_respostas: (d.total_respostas / 25) * 100};
-          case 'Área 4': return { ...d, total_respostas: (d.total_respostas / 17) * 100};
-          case 'Área 5': return { ...d, total_respostas: (d.total_respostas / 14) * 100};
-          case 'Área 6': return { ...d, total_respostas: (d.total_respostas / 89) * 100};
-          case 'Área 7': return { ...d, total_respostas: (d.total_respostas / 25) * 100};
-          default: return d;
+      const dadosQtdRespostasArea2 = dadosPorcentagemRespostasArea.map(
+        (d: any) => {
+          switch (d.nome) {
+            case 'Área 1':
+              return { ...d, total_respostas: (d.total_respostas / 20) * 100 };
+            case 'Área 2':
+              return { ...d, total_respostas: (d.total_respostas / 31) * 100 };
+            case 'Área 3':
+              return { ...d, total_respostas: (d.total_respostas / 25) * 100 };
+            case 'Área 4':
+              return { ...d, total_respostas: (d.total_respostas / 17) * 100 };
+            case 'Área 5':
+              return { ...d, total_respostas: (d.total_respostas / 14) * 100 };
+            case 'Área 6':
+              return { ...d, total_respostas: (d.total_respostas / 89) * 100 };
+            case 'Área 7':
+              return { ...d, total_respostas: (d.total_respostas / 25) * 100 };
+            default:
+              return d;
+          }
         }
-      });
+      );
 
       this.chartPorcentagemRespostasArea = {
         labels: dadosQtdRespostasArea?.map((d: any) => d.descricao) ?? [],
         datasets: [
           {
-        label: 'Quantidade de Respostas por Área (%)',
-        data: dadosQtdRespostasArea2?.map((d: any) => Number(Number(d.total_respostas).toFixed(2))) ?? [],
-        backgroundColor: dadosQtdRespostasArea2?.map((_: any, i: number) => this.getColor(i)) ?? [],
-        borderColor: dadosQtdRespostasArea2?.map((_: any, i: number) => this.getColor(i)) ?? [],
-        fill: false,
-        tension: 0.4,
+            label: 'Quantidade de Respostas por Área (%)',
+            data:
+              dadosQtdRespostasArea2?.map((d: any) =>
+                Number(Number(d.total_respostas).toFixed(2))
+              ) ?? [],
+            backgroundColor:
+              dadosQtdRespostasArea2?.map((_: any, i: number) =>
+                this.getColor(i)
+              ) ?? [],
+            borderColor:
+              dadosQtdRespostasArea2?.map((_: any, i: number) =>
+                this.getColor(i)
+              ) ?? [],
+            fill: false,
+            tension: 0.4,
           },
         ],
       };
@@ -214,22 +269,40 @@ export class HomeComponent {
         labels: dadosQtdRespostasArea?.map((d: any) => d.descricao) ?? [],
         datasets: [
           {
-        label: 'Quantidade de Respostas por Área',
-        data: dadosQtdRespostasArea?.map((d: any) => Number(Number(d.total_respostas).toFixed(2))) ?? [],
-        backgroundColor: dadosQtdRespostasArea?.map((_: any, i: number) => this.getColor(i)) ?? [],
-        borderColor: dadosQtdRespostasArea?.map((_: any, i: number) => this.getColor(i)) ?? [],
-        fill: false,
-        tension: 0.4,
+            label: 'Quantidade de Respostas por Área',
+            data:
+              dadosQtdRespostasArea?.map((d: any) =>
+                Number(Number(d.total_respostas).toFixed(2))
+              ) ?? [],
+            backgroundColor:
+              dadosQtdRespostasArea?.map((_: any, i: number) =>
+                this.getColor(i)
+              ) ?? [],
+            borderColor:
+              dadosQtdRespostasArea?.map((_: any, i: number) =>
+                this.getColor(i)
+              ) ?? [],
+            fill: false,
+            tension: 0.4,
           },
         ],
       };
-
 
       this.chartOptions = {
         responsive: true,
         plugins: {
           legend: {
-            display: true,
+            display: false,
+          },
+          datalabels: {
+            color: '#000',
+            anchor: 'end',
+            align: 'top',
+            font: {
+              weight: 'bold',
+              size: 12,
+            },
+            formatter: (value: any) => value, 
           },
         },
         scales: {
@@ -276,8 +349,7 @@ export class HomeComponent {
 
   async downloadExcell() {
     this.modalLoading?.startLoading();
-    const dados = await this.bancoService.downloadPesquisa()
+    const dados = await this.bancoService.downloadPesquisa();
     this.modalLoading?.stopLoading();
   }
 }
- 

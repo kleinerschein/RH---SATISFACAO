@@ -124,7 +124,7 @@ export class ResponderComponent implements OnInit {
     return this.form.get('respostas') as FormArray;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.form.valid && this.isValidId) {
       const respostasForm = this.respostas.value;
 
@@ -157,7 +157,7 @@ export class ResponderComponent implements OnInit {
         });
       });
 
-      this.bancoService.atualizaStatusLinkPorUuid(this.id, '1');
+      await this.bancoService.atualizaStatusLinkPorUuid(this.id, '1');
 
       this.messageService.add({
         severity: 'success',
@@ -167,7 +167,7 @@ export class ResponderComponent implements OnInit {
 
       setTimeout(() => {
         this.router.navigate([`/pesquisa/responder/${this.id}/finalizar`]);
-      }, 1000);
+      }, 3000);
     } else {
       this.form.markAllAsTouched();
     }
