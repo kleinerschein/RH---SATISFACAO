@@ -283,7 +283,7 @@ export class BancoService {
 
   async notasPorPergunta() {
     const query =
-      'SELECT p.pergunta, AVG(r.nota) as nota FROM respostas r JOIN pergunta p ON r.pergunta_id = p.id where p.descritiva = 0 GROUP BY p.pergunta';
+      'SELECT p.pergunta, ROUND(AVG(r.nota),2) as nota FROM respostas r JOIN pergunta p ON r.pergunta_id = p.id where p.descritiva = 0 GROUP BY p.pergunta';
     return this.consultarBanco(query);
   }
 
@@ -397,6 +397,11 @@ FROM respostas
 join areas on respostas.area_id = areas.id
 GROUP BY area_id;
 `;
+    return this.consultarBanco(query);
+  }
+
+  async getTotalRespostas(): Promise<any> {
+    const query = `SELECT round(COUNT(*) / 34) AS total_respostas FROM respostas`;
     return this.consultarBanco(query);
   }
 

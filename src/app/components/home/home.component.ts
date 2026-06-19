@@ -25,6 +25,7 @@ export class HomeComponent {
   chartAreaCategoria: any;
   chartQtdRespostasArea: any;
   chartPorcentagemRespostasArea: any;
+  chartMediaGeralData: any
   mediaGeral: number | null = null;
 
   constructor(private bancoService: BancoService) {}
@@ -58,6 +59,21 @@ export class HomeComponent {
       ]);
 
       this.mediaGeral = dadosMediaGeral?.[0]?.media_geral ?? null;
+
+      this.chartMediaGeralData = {
+        labels: ["Resultado Consolidado"],
+        datasets: [
+          {
+            label: "",
+            data: [this.mediaGeral],
+            backgroundColor: 'rgba(33,150,243,0.2)',
+            borderColor: '#2196F3',
+            fill: true,
+            tension: 0.4,
+          },
+        ],
+      };
+
       const generoColors: Record<string, { bg: string; border: string }> = {
         H: { bg: 'rgba(33,150,243,0.2)', border: '#2196F3' },
         HO: { bg: 'rgba(156,39,176,0.2)', border: '#9C27B0' },

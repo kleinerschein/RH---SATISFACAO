@@ -10,8 +10,18 @@
       ></button>
     </div>
 
-    <div class="grafico">
-      <h3>Média Geral: {{ mediaGeral }}</h3>
+    <div class="grafico" style="display: flex; gap: 1rem;">
+      <div>
+        <h3>Resultado Consolidado</h3>
+        <p-chart
+          type="bar"
+          [data]="chartMediaGeralData"
+          [options]="chartOptions"
+          [plugins]="chartPlugins"
+          [height]="'400px'"
+          [width]="'500px'"
+        ></p-chart>
+      </div>
     </div>
 
     <div class="linha-grafico">
@@ -22,7 +32,7 @@
           [data]="chartData"
           [options]="chartOptions"
           [plugins]="chartPlugins"
-          [height]="'300px'"
+          [height]="'400px'"
           [width]="'500px'"
         ></p-chart>
       </div>

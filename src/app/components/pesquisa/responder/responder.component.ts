@@ -135,18 +135,18 @@ export class ResponderComponent implements OnInit {
       for (let cat of this.categorias) {
         for (let pergunta of cat.perguntas) {
           respostasComIds.push({
-            perguntaId: pergunta.id, // supondo que o ID da pergunta seja 'id'
+            perguntaId: pergunta.id, 
             resposta: respostasForm[index],
           });
           index++;
         }
       }
 
-      respostasComIds.forEach((resposta) => {
+      for (const resposta of respostasComIds) {
         const valorResposta = Number(resposta.resposta);
         const nota = isNaN(valorResposta) ? 0 : valorResposta;
 
-        this.bancoService.insertResposta({
+        await this.bancoService.insertResposta({
           pergunta_id: resposta.perguntaId,
           area_id: this.form.get('area')?.value.id,
           nota: nota,
@@ -155,7 +155,7 @@ export class ResponderComponent implements OnInit {
           idade: this.form.get('idade')?.value,
           texto: resposta.resposta ?? '',
         });
-      });
+      }
 
       await this.bancoService.atualizaStatusLinkPorUuid(this.id, '1');
 
